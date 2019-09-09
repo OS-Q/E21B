@@ -1,0 +1,7 @@
+{
+    "description": "libOpenCM3 Framework",
+    "name": "framework-openCM3",
+    "system": "all",
+    "url": "http://www.libopencm3.org/",
+    "version": "1.0.0"
+}
