@@ -1,6 +1,6 @@
 {
-    "description": "libOpenCM3 Framework",
-    "name": "framework-openCM3",
+    "description": "Framework N4 with libopencm3",
+    "name": "framework-N4",
     "system": "all",
     "url": "http://www.libopencm3.org/",
     "version": "1.0.0"
