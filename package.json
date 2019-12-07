@@ -1,7 +1,7 @@
 {
-    "description": "Framework N4 with libopencm3",
-    "name": "framework-N4",
-    "system": "all",
+    "description": "Q Framework libOpenCM3",
+    "name": "framework-N04",
+    "system": "*",
     "url": "http://www.libopencm3.org/",
     "version": "1.0.0"
 }
