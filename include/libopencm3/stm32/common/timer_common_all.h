@@ -39,8 +39,6 @@ specific memorymap.h header before including this header file.*/
 /* Timer register base addresses (for convenience) */
 /****************************************************************************/
 /** @defgroup tim_reg_base Timer register base addresses
-@ingroup timer_defines
-
 @{*/
 #define TIM1				TIM1_BASE
 #define TIM2				TIM2_BASE
@@ -81,12 +79,18 @@ specific memorymap.h header before including this header file.*/
 #if defined(TIM17_BASE)
 # define TIM17				TIM17_BASE
 #endif
+#if defined(TIM21_BASE)
+# define TIM21				TIM21_BASE
+#endif
+#if defined(TIM22_BASE)
+# define TIM22				TIM22_BASE
+#endif
 /**@}*/
 
 /* --- Timer registers ----------------------------------------------------- */
 
 /* Control register 1 (TIMx_CR1) */
-#define TIM_CR1(tim_base)               MMIO32(tim_base + 0x00)
+#define TIM_CR1(tim_base)               MMIO32((tim_base) + 0x00)
 #define TIM1_CR1			TIM_CR1(TIM1)
 #define TIM2_CR1			TIM_CR1(TIM2)
 #define TIM3_CR1			TIM_CR1(TIM3)
@@ -106,7 +110,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CR1			TIM_CR1(TIM17)
 
 /* Control register 2 (TIMx_CR2) */
-#define TIM_CR2(tim_base)		MMIO32(tim_base + 0x04)
+#define TIM_CR2(tim_base)		MMIO32((tim_base) + 0x04)
 #define TIM1_CR2			TIM_CR2(TIM1)
 #define TIM2_CR2			TIM_CR2(TIM2)
 #define TIM3_CR2			TIM_CR2(TIM3)
@@ -120,7 +124,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CR2			TIM_CR2(TIM17)
 
 /* Slave mode control register (TIMx_SMCR) */
-#define TIM_SMCR(tim_base)		MMIO32(tim_base + 0x08)
+#define TIM_SMCR(tim_base)		MMIO32((tim_base) + 0x08)
 #define TIM1_SMCR			TIM_SMCR(TIM1)
 #define TIM2_SMCR			TIM_SMCR(TIM2)
 #define TIM3_SMCR			TIM_SMCR(TIM3)
@@ -132,7 +136,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM15_SMCR			TIM_SMCR(TIM15)
 
 /* DMA/Interrupt enable register (TIMx_DIER) */
-#define TIM_DIER(tim_base)		MMIO32(tim_base + 0x0C)
+#define TIM_DIER(tim_base)		MMIO32((tim_base) + 0x0C)
 #define TIM1_DIER			TIM_DIER(TIM1)
 #define TIM2_DIER			TIM_DIER(TIM2)
 #define TIM3_DIER			TIM_DIER(TIM3)
@@ -152,7 +156,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_DIER			TIM_DIER(TIM17)
 
 /* Status register (TIMx_SR) */
-#define TIM_SR(tim_base)		MMIO32(tim_base + 0x10)
+#define TIM_SR(tim_base)		MMIO32((tim_base) + 0x10)
 #define TIM1_SR				TIM_SR(TIM1)
 #define TIM2_SR				TIM_SR(TIM2)
 #define TIM3_SR				TIM_SR(TIM3)
@@ -172,7 +176,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_SR			TIM_SR(TIM17)
 
 /* Event generation register (TIMx_EGR) */
-#define TIM_EGR(tim_base)		MMIO32(tim_base + 0x14)
+#define TIM_EGR(tim_base)		MMIO32((tim_base) + 0x14)
 #define TIM1_EGR			TIM_EGR(TIM1)
 #define TIM2_EGR			TIM_EGR(TIM2)
 #define TIM3_EGR			TIM_EGR(TIM3)
@@ -192,7 +196,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_EGR			TIM_EGR(TIM17)
 
 /* Capture/compare mode register 1 (TIMx_CCMR1) */
-#define TIM_CCMR1(tim_base)		MMIO32(tim_base + 0x18)
+#define TIM_CCMR1(tim_base)		MMIO32((tim_base) + 0x18)
 #define TIM1_CCMR1			TIM_CCMR1(TIM1)
 #define TIM2_CCMR1			TIM_CCMR1(TIM2)
 #define TIM3_CCMR1			TIM_CCMR1(TIM3)
@@ -210,7 +214,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CCMR1			TIM_CCMR1(TIM17)
 
 /* Capture/compare mode register 2 (TIMx_CCMR2) */
-#define TIM_CCMR2(tim_base)		MMIO32(tim_base + 0x1C)
+#define TIM_CCMR2(tim_base)		MMIO32((tim_base) + 0x1C)
 #define TIM1_CCMR2			TIM_CCMR2(TIM1)
 #define TIM2_CCMR2			TIM_CCMR2(TIM2)
 #define TIM3_CCMR2			TIM_CCMR2(TIM3)
@@ -219,7 +223,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM8_CCMR2			TIM_CCMR2(TIM8)
 
 /* Capture/compare enable register (TIMx_CCER) */
-#define TIM_CCER(tim_base)		MMIO32(tim_base + 0x20)
+#define TIM_CCER(tim_base)		MMIO32((tim_base) + 0x20)
 #define TIM1_CCER			TIM_CCER(TIM1)
 #define TIM2_CCER			TIM_CCER(TIM2)
 #define TIM3_CCER			TIM_CCER(TIM3)
@@ -237,7 +241,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CCER			TIM_CCER(TIM17)
 
 /* Counter (TIMx_CNT) */
-#define TIM_CNT(tim_base)		MMIO32(tim_base + 0x24)
+#define TIM_CNT(tim_base)		MMIO32((tim_base) + 0x24)
 #define TIM1_CNT			TIM_CNT(TIM1)
 #define TIM2_CNT			TIM_CNT(TIM2)
 #define TIM3_CNT			TIM_CNT(TIM3)
@@ -257,7 +261,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CNT			TIM_CNT(TIM17)
 
 /* Prescaler (TIMx_PSC) */
-#define TIM_PSC(tim_base)		MMIO32(tim_base + 0x28)
+#define TIM_PSC(tim_base)		MMIO32((tim_base) + 0x28)
 #define TIM1_PSC			TIM_PSC(TIM1)
 #define TIM2_PSC			TIM_PSC(TIM2)
 #define TIM3_PSC			TIM_PSC(TIM3)
@@ -277,7 +281,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_PSC			TIM_PSC(TIM17)
 
 /* Auto-reload register (TIMx_ARR) */
-#define TIM_ARR(tim_base)		MMIO32(tim_base + 0x2C)
+#define TIM_ARR(tim_base)		MMIO32((tim_base) + 0x2C)
 #define TIM1_ARR			TIM_ARR(TIM1)
 #define TIM2_ARR			TIM_ARR(TIM2)
 #define TIM3_ARR			TIM_ARR(TIM3)
@@ -297,7 +301,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_ARR			TIM_ARR(TIM17)
 
 /* Repetition counter register (TIMx_RCR) */
-#define TIM_RCR(tim_base)		MMIO32(tim_base + 0x30)
+#define TIM_RCR(tim_base)		MMIO32((tim_base) + 0x30)
 #define TIM1_RCR			TIM_RCR(TIM1)
 #define TIM8_RCR			TIM_RCR(TIM8)
 #define TIM15_RCR			TIM_RCR(TIM15)
@@ -305,7 +309,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_RCR			TIM_RCR(TIM17)
 
 /* Capture/compare register 1 (TIMx_CCR1) */
-#define TIM_CCR1(tim_base)		MMIO32(tim_base + 0x34)
+#define TIM_CCR1(tim_base)		MMIO32((tim_base) + 0x34)
 #define TIM1_CCR1			TIM_CCR1(TIM1)
 #define TIM2_CCR1			TIM_CCR1(TIM2)
 #define TIM3_CCR1			TIM_CCR1(TIM3)
@@ -323,7 +327,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_CCR1			TIM_CCR1(TIM17)
 
 /* Capture/compare register 2 (TIMx_CCR2) */
-#define TIM_CCR2(tim_base)		MMIO32(tim_base + 0x38)
+#define TIM_CCR2(tim_base)		MMIO32((tim_base) + 0x38)
 #define TIM1_CCR2			TIM_CCR2(TIM1)
 #define TIM2_CCR2			TIM_CCR2(TIM2)
 #define TIM3_CCR2			TIM_CCR2(TIM3)
@@ -335,7 +339,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM15_CCR2			TIM_CCR2(TIM15)
 
 /* Capture/compare register 3 (TIMx_CCR3) */
-#define TIM_CCR3(tim_base)		MMIO32(tim_base + 0x3C)
+#define TIM_CCR3(tim_base)		MMIO32((tim_base) + 0x3C)
 #define TIM1_CCR3			TIM_CCR3(TIM1)
 #define TIM2_CCR3			TIM_CCR3(TIM2)
 #define TIM3_CCR3			TIM_CCR3(TIM3)
@@ -344,7 +348,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM8_CCR3			TIM_CCR3(TIM8)
 
 /* Capture/compare register 4 (TIMx_CCR4) */
-#define TIM_CCR4(tim_base)		MMIO32(tim_base + 0x40)
+#define TIM_CCR4(tim_base)		MMIO32((tim_base) + 0x40)
 #define TIM1_CCR4			TIM_CCR4(TIM1)
 #define TIM2_CCR4			TIM_CCR4(TIM2)
 #define TIM3_CCR4			TIM_CCR4(TIM3)
@@ -353,7 +357,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM8_CCR4			TIM_CCR4(TIM8)
 
 /* Break and dead-time register (TIMx_BDTR) */
-#define TIM_BDTR(tim_base)		MMIO32(tim_base + 0x44)
+#define TIM_BDTR(tim_base)		MMIO32((tim_base) + 0x44)
 #define TIM1_BDTR			TIM_BDTR(TIM1)
 #define TIM8_BDTR			TIM_BDTR(TIM8)
 #define TIM15_BDTR			TIM_BDTR(TIM15)
@@ -361,7 +365,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_BDTR			TIM_BDTR(TIM17)
 
 /* DMA control register (TIMx_DCR) */
-#define TIM_DCR(tim_base)		MMIO32(tim_base + 0x48)
+#define TIM_DCR(tim_base)		MMIO32((tim_base) + 0x48)
 #define TIM1_DCR			TIM_DCR(TIM1)
 #define TIM2_DCR			TIM_DCR(TIM2)
 #define TIM3_DCR			TIM_DCR(TIM3)
@@ -373,7 +377,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM17_DCR			TIM_DCR(TIM17)
 
 /* DMA address for full transfer (TIMx_DMAR) */
-#define TIM_DMAR(tim_base)		MMIO32(tim_base + 0x4C)
+#define TIM_DMAR(tim_base)		MMIO32((tim_base) + 0x4C)
 #define TIM1_DMAR			TIM_DMAR(TIM1)
 #define TIM2_DMAR			TIM_DMAR(TIM2)
 #define TIM3_DMAR			TIM_DMAR(TIM3)
@@ -388,8 +392,6 @@ specific memorymap.h header before including this header file.*/
 
 /****************************************************************************/
 /** @defgroup tim_x_cr1_cdr TIMx_CR1 CKD[1:0] Clock Division Ratio
-@ingroup timer_defines
-
 @{*/
 /* CKD[1:0]: Clock division */
 #define TIM_CR1_CKD_CK_INT		(0x0 << 8)
@@ -404,8 +406,6 @@ specific memorymap.h header before including this header file.*/
 /* CMS[1:0]: Center-aligned mode selection */
 /****************************************************************************/
 /** @defgroup tim_x_cr1_cms TIMx_CR1 CMS[1:0]: Center-aligned Mode Selection
-@ingroup timer_defines
-
 @{*/
 #define TIM_CR1_CMS_EDGE		(0x0 << 5)
 #define TIM_CR1_CMS_CENTER_1		(0x1 << 5)
@@ -417,8 +417,6 @@ specific memorymap.h header before including this header file.*/
 /* DIR: Direction */
 /****************************************************************************/
 /** @defgroup tim_x_cr1_dir TIMx_CR1 DIR: Direction
-@ingroup timer_defines
-
 @{*/
 #define TIM_CR1_DIR_UP			(0 << 4)
 #define TIM_CR1_DIR_DOWN		(1 << 4)
@@ -440,8 +438,6 @@ specific memorymap.h header before including this header file.*/
 
 /****************************************************************************/
 /** @defgroup tim_x_cr2_ois TIMx_CR2_OIS: Force Output Idle State Control Values
-@ingroup timer_defines
-
 @{*/
 /* OIS4:*//** Output idle state 4 (OC4 output) */
 #define TIM_CR2_OIS4			(1 << 14)
@@ -472,8 +468,6 @@ specific memorymap.h header before including this header file.*/
 /* MMS[2:0]: Master mode selection */
 /****************************************************************************/
 /** @defgroup tim_mastermode TIMx_CR2 MMS[6:4]: Master Mode Selection
-@ingroup timer_defines
-
 @{*/
 #define TIM_CR2_MMS_RESET		(0x0 << 4)
 #define TIM_CR2_MMS_ENABLE		(0x1 << 4)
@@ -533,9 +527,7 @@ specific memorymap.h header before including this header file.*/
 #define TIM_SMCR_MSM			(1 << 7)
 
 /* TS[2:0]: Trigger selection */
-/** @defgroup tim_ts TS Trigger selection
-@ingroup timer_defines
-
+/** @defgroup tim_ts TIMx_SMCR TS Trigger selection
 @{*/
 /** Internal Trigger 0 (ITR0) */
 #define TIM_SMCR_TS_ITR0		(0x0 << 4)
@@ -546,20 +538,18 @@ specific memorymap.h header before including this header file.*/
 /** Internal Trigger 3 (ITR3) */
 #define TIM_SMCR_TS_ITR3		(0x3 << 4)
 /** TI1 Edge Detector (TI1F_ED) */
-#define TIM_SMCR_TS_IT1F_ED		(0x4 << 4)
+#define TIM_SMCR_TS_TI1F_ED		(0x4 << 4)
 /** Filtered Timer Input 1 (TI1FP1) */
-#define TIM_SMCR_TS_IT1FP1		(0x5 << 4)
-/** Filtered Timer Input 2 (TI1FP2) */
-#define TIM_SMCR_TS_IT1FP2		(0x6 << 4)
+#define TIM_SMCR_TS_TI1FP1		(0x5 << 4)
+/** Filtered Timer Input 2 (TI2FP2) */
+#define TIM_SMCR_TS_TI2FP2		(0x6 << 4)
 /** External Trigger input (ETRF) */
 #define TIM_SMCR_TS_ETRF		(0x7 << 4)
 #define TIM_SMCR_TS_MASK		(0x7 << 4)
 /**@}*/
 
 /* SMS[2:0]: Slave mode selection */
-/** @defgroup tim_sms SMS Slave mode selection
-@ingroup timer_defines
-
+/** @defgroup tim_sms TIMx_SMCR SMS Slave mode selection
 @{*/
 /** Slave mode disabled */
 #define TIM_SMCR_SMS_OFF		(0x0 << 0)
@@ -593,8 +583,6 @@ depending on the level of the complementary input. */
 
 /****************************************************************************/
 /** @defgroup tim_irq_enable TIMx_DIER Timer DMA and Interrupt Enable Values
-@ingroup timer_defines
-
 @{*/
 /* TDE:*//** Trigger DMA request enable */
 #define TIM_DIER_TDE			(1 << 14)
@@ -645,8 +633,6 @@ depending on the level of the complementary input. */
 /* --- TIMx_SR values ------------------------------------------------------ */
 /****************************************************************************/
 /** @defgroup tim_sr_values TIMx_SR Timer Status Register Flags
-@ingroup timer_defines
-
 @{*/
 
 /* CC4OF:*//** Capture/compare 4 overcapture flag */
@@ -690,8 +676,6 @@ depending on the level of the complementary input. */
 
 /****************************************************************************/
 /** @defgroup tim_event_gen TIMx_EGR Timer Event Generator Values
-@ingroup timer_defines
-
 @{*/
 
 /* BG:*//** Break generation */
@@ -863,8 +847,8 @@ depending on the level of the complementary input. */
 /* Note: CC2S bits are writable only when the channel is OFF (CC2E = 0 in
  * TIMx_CCER). */
 #define TIM_CCMR2_CC4S_OUT		(0x0 << 8)
-#define TIM_CCMR2_CC4S_IN_TI2		(0x1 << 8)
-#define TIM_CCMR2_CC4S_IN_TI1		(0x2 << 8)
+#define TIM_CCMR2_CC4S_IN_TI4		(0x1 << 8)
+#define TIM_CCMR2_CC4S_IN_TI3		(0x2 << 8)
 #define TIM_CCMR2_CC4S_IN_TRC		(0x3 << 8)
 #define TIM_CCMR2_CC4S_MASK		(0x3 << 8)
 
@@ -892,8 +876,8 @@ depending on the level of the complementary input. */
 /* Note: CC2S bits are writable only when the channel is OFF (CC2E = 0 in
  * TIMx_CCER). */
 #define TIM_CCMR2_CC3S_OUT		(0x0 << 0)
-#define TIM_CCMR2_CC3S_IN_TI2		(0x1 << 0)
-#define TIM_CCMR2_CC3S_IN_TI1		(0x2 << 0)
+#define TIM_CCMR2_CC3S_IN_TI3		(0x1 << 0)
+#define TIM_CCMR2_CC3S_IN_TI4		(0x2 << 0)
 #define TIM_CCMR2_CC3S_IN_TRC		(0x3 << 0)
 #define TIM_CCMR2_CC3S_MASK		(0x3 << 0)
 
@@ -952,6 +936,9 @@ depending on the level of the complementary input. */
 #define TIM_CCMR2_IC3PSC_MASK		(0x3 << 2)
 
 /* --- TIMx_CCER values ---------------------------------------------------- */
+
+/* CC4NP: Capture/compare 4 complementary output polarity */
+#define TIM_CCER_CC4NP			(1 << 15)
 
 /* CC4P: Capture/compare 4 output polarity */
 #define TIM_CCER_CC4P			(1 << 13)
@@ -1050,8 +1037,6 @@ depending on the level of the complementary input. */
 /* LOCK[1:0]: Lock configuration */
 /****************************************************************************/
 /** @defgroup tim_lock TIM_BDTR_LOCK Timer Lock Values
-@ingroup timer_defines
-
 @{*/
 #define TIM_BDTR_LOCK_OFF		(0x0 << 8)
 #define TIM_BDTR_LOCK_LEVEL_1		(0x1 << 8)
@@ -1167,7 +1152,6 @@ enum tim_et_pol {
 
 BEGIN_DECLS
 
-void timer_reset(uint32_t timer_peripheral);
 void timer_enable_irq(uint32_t timer_peripheral, uint32_t irq);
 void timer_disable_irq(uint32_t timer_peripheral, uint32_t irq);
 bool timer_interrupt_source(uint32_t timer_peripheral, uint32_t flag);
@@ -1264,4 +1248,3 @@ END_DECLS
 #endif
 /** @endcond */
 /**@}*/
-

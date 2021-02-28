@@ -13,7 +13,7 @@ Gareth McMullin <gareth@blacksphere.co.nz>
 @date 10 March 2013
 
 A set of structure definitions for the USB control structures
-defined in chapter 9 of the "Univeral Serial Bus Specification Revision 2.0"
+defined in chapter 9 of the "Universal Serial Bus Specification Revision 2.0"
 Available from the USB Implementers Forum - http://www.usb.org/
 
 LGPL License Terms @ref lgpl_license
@@ -48,7 +48,7 @@ LGPL License Terms @ref lgpl_license
 
 /*
  * This file contains structure definitions for the USB control structures
- * defined in chapter 9 of the "Univeral Serial Bus Specification Revision 2.0"
+ * defined in chapter 9 of the "Universal Serial Bus Specification Revision 2.0"
  * Available from the USB Implementers Forum - http://www.usb.org/
  */
 
@@ -65,17 +65,21 @@ struct usb_setup_data {
 #define USB_CLASS_VENDOR			0xFF
 
 /* bmRequestType bit definitions */
+/* bit 7 : direction */
+#define USB_REQ_TYPE_DIRECTION			0x80
 #define USB_REQ_TYPE_IN				0x80
+#define USB_REQ_TYPE_OUT			0x0
+/* bits 6..5 : type */
+#define USB_REQ_TYPE_TYPE			0x60
 #define USB_REQ_TYPE_STANDARD			0x00
 #define USB_REQ_TYPE_CLASS			0x20
 #define USB_REQ_TYPE_VENDOR			0x40
+/* bits 4..0 : recipient */
+#define USB_REQ_TYPE_RECIPIENT			0x1F
 #define USB_REQ_TYPE_DEVICE			0x00
 #define USB_REQ_TYPE_INTERFACE			0x01
 #define USB_REQ_TYPE_ENDPOINT			0x02
-
-#define USB_REQ_TYPE_DIRECTION			0x80
-#define USB_REQ_TYPE_TYPE			0x60
-#define USB_REQ_TYPE_RECIPIENT			0x1F
+#define USB_REQ_TYPE_OTHER			0x03
 
 /* USB Standard Request Codes - Table 9-4 */
 #define USB_REQ_GET_STATUS			0
@@ -150,6 +154,16 @@ struct usb_device_qualifier_descriptor {
 	uint8_t bReserved;
 } __attribute__((packed));
 
+/* This is only defined as a top level named struct to improve c++
+ * compatibility.  You should never need to instance this struct
+ * in user code! */
+struct usb_interface {
+	uint8_t *cur_altsetting;
+	uint8_t num_altsetting;
+	const struct usb_iface_assoc_descriptor *iface_assoc;
+	const struct usb_interface_descriptor *altsetting;
+};
+
 /* USB Standard Configuration Descriptor - Table 9-10 */
 struct usb_config_descriptor {
 	uint8_t bLength;
@@ -162,16 +176,12 @@ struct usb_config_descriptor {
 	uint8_t bMaxPower;
 
 	/* Descriptor ends here.  The following are used internally: */
-	const struct usb_interface {
-		uint8_t *cur_altsetting;
-		uint8_t num_altsetting;
-		const struct usb_iface_assoc_descriptor *iface_assoc;
-		const struct usb_interface_descriptor *altsetting;
-	} *interface;
+	const struct usb_interface *interface;
 } __attribute__((packed));
 #define USB_DT_CONFIGURATION_SIZE		9
 
 /* USB Configuration Descriptor bmAttributes bit definitions */
+#define USB_CONFIG_ATTR_DEFAULT			0x80	/** always required (USB2.0 table 9-10) */
 #define USB_CONFIG_ATTR_SELF_POWERED		0x40
 #define USB_CONFIG_ATTR_REMOTE_WAKEUP		0x20
 
@@ -217,20 +227,24 @@ struct usb_endpoint_descriptor {
 #define USB_ENDPOINT_ADDR_OUT(x) (x)
 #define USB_ENDPOINT_ADDR_IN(x) (0x80 | (x))
 
-/* USB Endpoint Descriptor bmAttributes bit definitions */
+/* USB Endpoint Descriptor bmAttributes bit definitions - Table 9-13 */
+/* bits 1..0 : transfer type */
 #define USB_ENDPOINT_ATTR_CONTROL		0x00
 #define USB_ENDPOINT_ATTR_ISOCHRONOUS		0x01
 #define USB_ENDPOINT_ATTR_BULK			0x02
 #define USB_ENDPOINT_ATTR_INTERRUPT		0x03
-
+#define USB_ENDPOINT_ATTR_TYPE		0x03
+/* bits 3..2 : Sync type (only if ISOCHRONOUS) */
 #define USB_ENDPOINT_ATTR_NOSYNC		0x00
 #define USB_ENDPOINT_ATTR_ASYNC			0x04
 #define USB_ENDPOINT_ATTR_ADAPTIVE		0x08
 #define USB_ENDPOINT_ATTR_SYNC			0x0C
-
+#define USB_ENDPOINT_ATTR_SYNCTYPE		0x0C
+/* bits 5..4 : usage type (only if ISOCHRONOUS) */
 #define USB_ENDPOINT_ATTR_DATA			0x00
 #define USB_ENDPOINT_ATTR_FEEDBACK		0x10
 #define USB_ENDPOINT_ATTR_IMPLICIT_FEEDBACK_DATA 0x20
+#define USB_ENDPOINT_ATTR_USAGETYPE		0x30
 
 /* Table 9-15 specifies String Descriptor Zero.
  * Table 9-16 specified UNICODE String Descriptor.

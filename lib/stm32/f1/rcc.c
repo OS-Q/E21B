@@ -1,6 +1,6 @@
-/** @defgroup STM32F1xx-rcc-file RCC
+/** @defgroup rcc_file RCC peripheral API
 
-@ingroup STM32F1xx
+@ingroup peripheral_apis
 
 @brief <b>libopencm3 STM32F1xx Reset and Clock Control</b>
 
@@ -64,31 +64,31 @@ uint32_t rcc_ahb_frequency = 8000000;
 Clear the interrupt flag that was set when a clock oscillator became ready to
 use.
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param[in] osc Oscillator ID
 */
 
 void rcc_osc_ready_int_clear(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		RCC_CIR |= RCC_CIR_PLLRDYC;
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		RCC_CIR |= RCC_CIR_PLL2RDYC;
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		RCC_CIR |= RCC_CIR_PLL3RDYC;
 		break;
-	case HSE:
+	case RCC_HSE:
 		RCC_CIR |= RCC_CIR_HSERDYC;
 		break;
-	case HSI:
+	case RCC_HSI:
 		RCC_CIR |= RCC_CIR_HSIRDYC;
 		break;
-	case LSE:
+	case RCC_LSE:
 		RCC_CIR |= RCC_CIR_LSERDYC;
 		break;
-	case LSI:
+	case RCC_LSI:
 		RCC_CIR |= RCC_CIR_LSIRDYC;
 		break;
 	}
@@ -97,31 +97,31 @@ void rcc_osc_ready_int_clear(enum rcc_osc osc)
 /*---------------------------------------------------------------------------*/
 /** @brief RCC Enable the Oscillator Ready Interrupt
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param osc Oscillator ID
 */
 
 void rcc_osc_ready_int_enable(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		RCC_CIR |= RCC_CIR_PLLRDYIE;
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		RCC_CIR |= RCC_CIR_PLL2RDYIE;
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		RCC_CIR |= RCC_CIR_PLL3RDYIE;
 		break;
-	case HSE:
+	case RCC_HSE:
 		RCC_CIR |= RCC_CIR_HSERDYIE;
 		break;
-	case HSI:
+	case RCC_HSI:
 		RCC_CIR |= RCC_CIR_HSIRDYIE;
 		break;
-	case LSE:
+	case RCC_LSE:
 		RCC_CIR |= RCC_CIR_LSERDYIE;
 		break;
-	case LSI:
+	case RCC_LSI:
 		RCC_CIR |= RCC_CIR_LSIRDYIE;
 		break;
 	}
@@ -130,31 +130,31 @@ void rcc_osc_ready_int_enable(enum rcc_osc osc)
 /*---------------------------------------------------------------------------*/
 /** @brief RCC Disable the Oscillator Ready Interrupt
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param[in] osc Oscillator ID
 */
 
 void rcc_osc_ready_int_disable(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		RCC_CIR &= ~RCC_CIR_PLLRDYIE;
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		RCC_CIR &= ~RCC_CIR_PLL2RDYIE;
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		RCC_CIR &= ~RCC_CIR_PLL3RDYIE;
 		break;
-	case HSE:
+	case RCC_HSE:
 		RCC_CIR &= ~RCC_CIR_HSERDYIE;
 		break;
-	case HSI:
+	case RCC_HSI:
 		RCC_CIR &= ~RCC_CIR_HSIRDYIE;
 		break;
-	case LSE:
+	case RCC_LSE:
 		RCC_CIR &= ~RCC_CIR_LSERDYIE;
 		break;
-	case LSI:
+	case RCC_LSI:
 		RCC_CIR &= ~RCC_CIR_LSIRDYIE;
 		break;
 	}
@@ -163,32 +163,32 @@ void rcc_osc_ready_int_disable(enum rcc_osc osc)
 /*---------------------------------------------------------------------------*/
 /** @brief RCC Read the Oscillator Ready Interrupt Flag
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param[in] osc Oscillator ID
 @returns int. Boolean value for flag set.
 */
 
 int rcc_osc_ready_int_flag(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		return ((RCC_CIR & RCC_CIR_PLLRDYF) != 0);
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		return ((RCC_CIR & RCC_CIR_PLL2RDYF) != 0);
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		return ((RCC_CIR & RCC_CIR_PLL3RDYF) != 0);
 		break;
-	case HSE:
+	case RCC_HSE:
 		return ((RCC_CIR & RCC_CIR_HSERDYF) != 0);
 		break;
-	case HSI:
+	case RCC_HSI:
 		return ((RCC_CIR & RCC_CIR_HSIRDYF) != 0);
 		break;
-	case LSE:
+	case RCC_LSE:
 		return ((RCC_CIR & RCC_CIR_LSERDYF) != 0);
 		break;
-	case LSI:
+	case RCC_LSI:
 		return ((RCC_CIR & RCC_CIR_LSIRDYF) != 0);
 		break;
 	}
@@ -217,37 +217,30 @@ int rcc_css_int_flag(void)
 	return ((RCC_CIR & RCC_CIR_CSSF) != 0);
 }
 
-/*---------------------------------------------------------------------------*/
-/** @brief RCC Wait for Oscillator Ready.
-
-@param[in] osc enum ::osc_t. Oscillator ID
-*/
+bool rcc_is_osc_ready(enum rcc_osc osc)
+{
+	switch (osc) {
+	case RCC_PLL:
+		return RCC_CR & RCC_CR_PLLRDY;
+	case RCC_PLL2:
+		return RCC_CR & RCC_CR_PLL2RDY;
+	case RCC_PLL3:
+		return RCC_CR & RCC_CR_PLL3RDY;
+	case RCC_HSE:
+		return RCC_CR & RCC_CR_HSERDY;
+	case RCC_HSI:
+		return RCC_CR & RCC_CR_HSIRDY;
+	case RCC_LSE:
+		return RCC_BDCR & RCC_BDCR_LSERDY;
+	case RCC_LSI:
+		return RCC_CSR & RCC_CSR_LSIRDY;
+	}
+	return false;
+}
 
 void rcc_wait_for_osc_ready(enum rcc_osc osc)
 {
-	switch (osc) {
-	case PLL:
-		while ((RCC_CR & RCC_CR_PLLRDY) == 0);
-		break;
-	case PLL2:
-		while ((RCC_CR & RCC_CR_PLL2RDY) == 0);
-		break;
-	case PLL3:
-		while ((RCC_CR & RCC_CR_PLL3RDY) == 0);
-		break;
-	case HSE:
-		while ((RCC_CR & RCC_CR_HSERDY) == 0);
-		break;
-	case HSI:
-		while ((RCC_CR & RCC_CR_HSIRDY) == 0);
-		break;
-	case LSE:
-		while ((RCC_BDCR & RCC_BDCR_LSERDY) == 0);
-		break;
-	case LSI:
-		while ((RCC_CSR & RCC_CSR_LSIRDY) == 0);
-		break;
-	}
+	while (!rcc_is_osc_ready(osc));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -262,31 +255,31 @@ status flag is available to indicate when the oscillator becomes ready (see
 backup domain write protection has been removed (see @ref
 pwr_disable_backup_domain_write_protect).
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param[in] osc Oscillator ID
 */
 
 void rcc_osc_on(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		RCC_CR |= RCC_CR_PLLON;
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		RCC_CR |= RCC_CR_PLL2ON;
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		RCC_CR |= RCC_CR_PLL3ON;
 		break;
-	case HSE:
+	case RCC_HSE:
 		RCC_CR |= RCC_CR_HSEON;
 		break;
-	case HSI:
+	case RCC_HSI:
 		RCC_CR |= RCC_CR_HSION;
 		break;
-	case LSE:
+	case RCC_LSE:
 		RCC_BDCR |= RCC_BDCR_LSEON;
 		break;
-	case LSI:
+	case RCC_LSI:
 		RCC_CSR |= RCC_CSR_LSION;
 		break;
 	}
@@ -303,31 +296,31 @@ backup domain write protection has been removed (see
 @ref pwr_disable_backup_domain_write_protect) or the backup domain has been
 (see reset @ref rcc_backupdomain_reset).
 
-@param[in] osc enum ::osc_t. Oscillator ID
+@param[in] osc Oscillator ID
 */
 
 void rcc_osc_off(enum rcc_osc osc)
 {
 	switch (osc) {
-	case PLL:
+	case RCC_PLL:
 		RCC_CR &= ~RCC_CR_PLLON;
 		break;
-	case PLL2:
+	case RCC_PLL2:
 		RCC_CR &= ~RCC_CR_PLL2ON;
 		break;
-	case PLL3:
+	case RCC_PLL3:
 		RCC_CR &= ~RCC_CR_PLL3ON;
 		break;
-	case HSE:
+	case RCC_HSE:
 		RCC_CR &= ~RCC_CR_HSEON;
 		break;
-	case HSI:
+	case RCC_HSI:
 		RCC_CR &= ~RCC_CR_HSION;
 		break;
-	case LSE:
+	case RCC_LSE:
 		RCC_BDCR &= ~RCC_BDCR_LSEON;
 		break;
-	case LSI:
+	case RCC_LSI:
 		RCC_CSR &= ~RCC_CSR_LSION;
 		break;
 	}
@@ -351,72 +344,6 @@ void rcc_css_enable(void)
 void rcc_css_disable(void)
 {
 	RCC_CR &= ~RCC_CR_CSSON;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief RCC Enable Bypass.
-
-Enable an external clock to bypass the internal clock (high speed and low speed
-clocks only). The external clock must be enabled (see @ref rcc_osc_on) and the
-internal clock must be disabled (see @ref rcc_osc_off) for this to have effect.
-
-@note The LSE clock is in the backup domain and cannot be bypassed until the
-backup domain write protection has been removed (see @ref
-pwr_disable_backup_domain_write_protect).
-
-@param[in] osc enum ::osc_t. Oscillator ID. Only HSE and LSE have effect.
-*/
-
-void rcc_osc_bypass_enable(enum rcc_osc osc)
-{
-	switch (osc) {
-	case HSE:
-		RCC_CR |= RCC_CR_HSEBYP;
-		break;
-	case LSE:
-		RCC_BDCR |= RCC_BDCR_LSEBYP;
-		break;
-	case PLL:
-	case PLL2:
-	case PLL3:
-	case HSI:
-	case LSI:
-		/* Do nothing, only HSE/LSE allowed here. */
-		break;
-	}
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief RCC Disable Bypass.
-
-Re-enable the internal clock (high speed and low speed clocks only). The
-internal clock must be disabled (see @ref rcc_osc_off) for this to have effect.
-
-@note The LSE clock is in the backup domain and cannot have bypass removed
-until the backup domain write protection has been removed (see @ref
-pwr_disable_backup_domain_write_protect) or the backup domain has been reset
-(see @ref rcc_backupdomain_reset).
-
-@param[in] osc enum ::osc_t. Oscillator ID. Only HSE and LSE have effect.
-*/
-
-void rcc_osc_bypass_disable(enum rcc_osc osc)
-{
-	switch (osc) {
-	case HSE:
-		RCC_CR &= ~RCC_CR_HSEBYP;
-		break;
-	case LSE:
-		RCC_BDCR &= ~RCC_BDCR_LSEBYP;
-		break;
-	case PLL:
-	case PLL2:
-	case PLL3:
-	case HSI:
-	case LSI:
-		/* Do nothing, only HSE/LSE allowed here. */
-		break;
-	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -509,7 +436,7 @@ void rcc_set_pllxtpre(uint32_t pllxtpre)
 
 uint32_t rcc_rtc_clock_enabled_flag(void)
 {
-        return RCC_BDCR & RCC_BDCR_RTCEN;
+	return RCC_BDCR & RCC_BDCR_RTCEN;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -525,7 +452,7 @@ void rcc_enable_rtc_clock(void)
 /*---------------------------------------------------------------------------*/
 /** @brief RCC Set the Source for the RTC clock
 
-@param[in] clock_source ::rcc_osc. RTC clock source. Only HSE/128, LSE and LSI.
+@param[in] clock_source RTC clock source. Only HSE/128, LSE and LSI.
 */
 
 void rcc_set_rtc_clock_source(enum rcc_osc clock_source)
@@ -533,7 +460,7 @@ void rcc_set_rtc_clock_source(enum rcc_osc clock_source)
 	uint32_t reg32;
 
 	switch (clock_source) {
-	case LSE:
+	case RCC_LSE:
 		/* Turn the LSE on and wait while it stabilises. */
 		RCC_BDCR |= RCC_BDCR_LSEON;
 		while ((reg32 = (RCC_BDCR & RCC_BDCR_LSERDY)) == 0);
@@ -542,7 +469,7 @@ void rcc_set_rtc_clock_source(enum rcc_osc clock_source)
 		RCC_BDCR &= ~((1 << 8) | (1 << 9));
 		RCC_BDCR |= (1 << 8);
 		break;
-	case LSI:
+	case RCC_LSI:
 		/* Turn the LSI on and wait while it stabilises. */
 		RCC_CSR |= RCC_CSR_LSION;
 		while ((reg32 = (RCC_CSR & RCC_CSR_LSIRDY)) == 0);
@@ -551,7 +478,7 @@ void rcc_set_rtc_clock_source(enum rcc_osc clock_source)
 		RCC_BDCR &= ~((1 << 8) | (1 << 9));
 		RCC_BDCR |= (1 << 9);
 		break;
-	case HSE:
+	case RCC_HSE:
 		/* Turn the HSE on and wait while it stabilises. */
 		RCC_CR |= RCC_CR_HSEON;
 		while ((reg32 = (RCC_CR & RCC_CR_HSERDY)) == 0);
@@ -560,10 +487,10 @@ void rcc_set_rtc_clock_source(enum rcc_osc clock_source)
 		RCC_BDCR &= ~((1 << 8) | (1 << 9));
 		RCC_BDCR |= (1 << 9) | (1 << 8);
 		break;
-	case PLL:
-	case PLL2:
-	case PLL3:
-	case HSI:
+	case RCC_PLL:
+	case RCC_PLL2:
+	case RCC_PLL3:
+	case RCC_HSI:
 		/* Unusable clock source, here to prevent warnings. */
 		/* Turn off clock sources to RTC. */
 		RCC_BDCR &= ~((1 << 8) | (1 << 9));
@@ -629,7 +556,7 @@ void rcc_set_hpre(uint32_t hpre)
 /** @brief RCC Set the USB Prescale Factor.
 
 The prescale factor can be set to 1 (no prescale) for use when the PLL clock is
-48MHz, or 1.5 to generate the 48MHz USB clock from a 64MHz PLL clock.
+48MHz, or 1.5 to generate the 48MHz USB clock from a 72MHz PLL clock.
 
 @note This bit cannot be reset while the USB clock is enabled.
 
@@ -638,10 +565,11 @@ The prescale factor can be set to 1 (no prescale) for use when the PLL clock is
 
 void rcc_set_usbpre(uint32_t usbpre)
 {
-	if (usbpre)
+	if (usbpre) {
 		RCC_CFGR |= RCC_CFGR_USBPRE;
-	else
+	} else {
 		RCC_CFGR &= ~RCC_CFGR_USBPRE;
+	}
 }
 
 void rcc_set_prediv1(uint32_t prediv)
@@ -658,10 +586,11 @@ void rcc_set_prediv2(uint32_t prediv)
 
 void rcc_set_prediv1_source(uint32_t rccsrc)
 {
-	if (rccsrc)
+	if (rccsrc) {
 		RCC_CFGR2 |= RCC_CFGR2_PREDIV1SRC;
-	else
+	} else {
 		RCC_CFGR2 &= ~RCC_CFGR2_PREDIV1SRC;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -692,14 +621,14 @@ uint32_t rcc_system_clock_source(void)
 void rcc_clock_setup_in_hsi_out_64mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);   /* Set. 64MHz Max. 72MHz */
@@ -725,8 +654,8 @@ void rcc_clock_setup_in_hsi_out_64mhz(void)
 	rcc_set_pll_source(RCC_CFGR_PLLSRC_HSI_CLK_DIV2);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -745,14 +674,14 @@ void rcc_clock_setup_in_hsi_out_64mhz(void)
 void rcc_clock_setup_in_hsi_out_48mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);	/*Set.48MHz Max.72MHz */
@@ -779,8 +708,8 @@ void rcc_clock_setup_in_hsi_out_48mhz(void)
 	rcc_set_pll_source(RCC_CFGR_PLLSRC_HSI_CLK_DIV2);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -799,14 +728,14 @@ void rcc_clock_setup_in_hsi_out_48mhz(void)
 void rcc_clock_setup_in_hsi_out_24mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV); /* Set. 24MHz Max. 24MHz */
@@ -815,7 +744,7 @@ void rcc_clock_setup_in_hsi_out_24mhz(void)
 	rcc_set_ppre2(RCC_CFGR_PPRE2_HCLK_NODIV); /* Set. 24MHz Max. 24MHz */
 
 	/*
-	 * Sysclk is (will be) running with 24MHz -> 2 waitstates.
+	 * Sysclk is (will be) running with 24MHz -> 0 waitstates.
 	 * 0WS from 0-24MHz
 	 * 1WS from 24-48MHz
 	 * 2WS from 48-72MHz
@@ -832,8 +761,8 @@ void rcc_clock_setup_in_hsi_out_24mhz(void)
 	rcc_set_pll_source(RCC_CFGR_PLLSRC_HSI_CLK_DIV2);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -852,19 +781,19 @@ void rcc_clock_setup_in_hsi_out_24mhz(void)
 void rcc_clock_setup_in_hse_8mhz_out_24mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/* Enable external high-speed oscillator 8MHz. */
-	rcc_osc_on(HSE);
-	rcc_wait_for_osc_ready(HSE);
+	rcc_osc_on(RCC_HSE);
+	rcc_wait_for_osc_ready(RCC_HSE);
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSECLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);    /* Set. 24MHz Max. 72MHz */
@@ -896,8 +825,8 @@ void rcc_clock_setup_in_hse_8mhz_out_24mhz(void)
 	rcc_set_pllxtpre(RCC_CFGR_PLLXTPRE_HSE_CLK);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -916,19 +845,19 @@ void rcc_clock_setup_in_hse_8mhz_out_24mhz(void)
 void rcc_clock_setup_in_hse_8mhz_out_72mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/* Enable external high-speed oscillator 8MHz. */
-	rcc_osc_on(HSE);
-	rcc_wait_for_osc_ready(HSE);
+	rcc_osc_on(RCC_HSE);
+	rcc_wait_for_osc_ready(RCC_HSE);
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSECLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);    /* Set. 72MHz Max. 72MHz */
@@ -960,8 +889,8 @@ void rcc_clock_setup_in_hse_8mhz_out_72mhz(void)
 	rcc_set_pllxtpre(RCC_CFGR_PLLXTPRE_HSE_CLK);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -973,26 +902,26 @@ void rcc_clock_setup_in_hse_8mhz_out_72mhz(void)
 }
 
 /*---------------------------------------------------------------------------*/
-/** @brief RCC Set System Clock PLL at 24MHz from HSE at 12MHz
+/** @brief RCC Set System Clock PLL at 72MHz from HSE at 12MHz
 
 */
 
 void rcc_clock_setup_in_hse_12mhz_out_72mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/* Enable external high-speed oscillator 16MHz. */
-	rcc_osc_on(HSE);
-	rcc_wait_for_osc_ready(HSE);
+	rcc_osc_on(RCC_HSE);
+	rcc_wait_for_osc_ready(RCC_HSE);
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSECLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);    /* Set. 72MHz Max. 72MHz */
@@ -1024,8 +953,8 @@ void rcc_clock_setup_in_hse_12mhz_out_72mhz(void)
 	rcc_set_pllxtpre(RCC_CFGR_PLLXTPRE_HSE_CLK);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -1037,26 +966,26 @@ void rcc_clock_setup_in_hse_12mhz_out_72mhz(void)
 }
 
 /*---------------------------------------------------------------------------*/
-/** @brief RCC Set System Clock PLL at 24MHz from HSE at 16MHz
+/** @brief RCC Set System Clock PLL at 72MHz from HSE at 16MHz
 
 */
 
 void rcc_clock_setup_in_hse_16mhz_out_72mhz(void)
 {
 	/* Enable internal high-speed oscillator. */
-	rcc_osc_on(HSI);
-	rcc_wait_for_osc_ready(HSI);
+	rcc_osc_on(RCC_HSI);
+	rcc_wait_for_osc_ready(RCC_HSI);
 
 	/* Select HSI as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSICLK);
 
 	/* Enable external high-speed oscillator 16MHz. */
-	rcc_osc_on(HSE);
-	rcc_wait_for_osc_ready(HSE);
+	rcc_osc_on(RCC_HSE);
+	rcc_wait_for_osc_ready(RCC_HSE);
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSECLK);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);    /* Set. 72MHz Max. 72MHz */
@@ -1088,8 +1017,8 @@ void rcc_clock_setup_in_hse_16mhz_out_72mhz(void)
 	rcc_set_pllxtpre(RCC_CFGR_PLLXTPRE_HSE_CLK_DIV2);
 
 	/* Enable PLL oscillator and wait for it to stabilize. */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);
@@ -1108,8 +1037,8 @@ void rcc_clock_setup_in_hse_16mhz_out_72mhz(void)
 void rcc_clock_setup_in_hse_25mhz_out_72mhz(void)
 {
 	/* Enable external high-speed oscillator 25MHz. */
-	rcc_osc_on(HSE);
-	rcc_wait_for_osc_ready(HSE);
+	rcc_osc_on(RCC_HSE);
+	rcc_wait_for_osc_ready(RCC_HSE);
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_HSECLK);
 
 	/*
@@ -1121,7 +1050,7 @@ void rcc_clock_setup_in_hse_25mhz_out_72mhz(void)
 	flash_set_ws(FLASH_ACR_LATENCY_2WS);
 
 	/*
-	 * Set prescalers for AHB, ADC, ABP1, ABP2.
+	 * Set prescalers for AHB, ADC, APB1, APB2.
 	 * Do this before touching the PLL (TODO: why?).
 	 */
 	rcc_set_hpre(RCC_CFGR_HPRE_SYSCLK_NODIV);    /* Set. 72MHz Max. 72MHz */
@@ -1134,8 +1063,8 @@ void rcc_clock_setup_in_hse_25mhz_out_72mhz(void)
 	rcc_set_pll2_multiplication_factor(RCC_CFGR2_PLL2MUL_PLL2_CLK_MUL8);
 
 	/* Enable PLL2 oscillator and wait for it to stabilize */
-	rcc_osc_on(PLL2);
-	rcc_wait_for_osc_ready(PLL2);
+	rcc_osc_on(RCC_PLL2);
+	rcc_wait_for_osc_ready(RCC_PLL2);
 
 	/* Set pll1 prediv/multiplier, prediv1 src, and usb predivider */
 	rcc_set_pllxtpre(RCC_CFGR_PLLXTPRE_HSE_CLK);
@@ -1146,8 +1075,8 @@ void rcc_clock_setup_in_hse_25mhz_out_72mhz(void)
 	rcc_set_usbpre(RCC_CFGR_USBPRE_PLL_VCO_CLK_DIV3);
 
 	/* enable PLL1 and wait for it to stabilize */
-	rcc_osc_on(PLL);
-	rcc_wait_for_osc_ready(PLL);
+	rcc_osc_on(RCC_PLL);
+	rcc_wait_for_osc_ready(RCC_PLL);
 
 	/* Select PLL as SYSCLK source. */
 	rcc_set_sysclk_source(RCC_CFGR_SW_SYSCLKSEL_PLLCLK);

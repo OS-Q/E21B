@@ -49,19 +49,19 @@ specific memorymap.h header before including this header file.*/
 /* --- ADC registers ------------------------------------------------------- */
 
 /* ADC status register (ADC_SR) */
-#define ADC_SR(block)                   MMIO32(block + 0x00)
+#define ADC_SR(block)                   MMIO32((block) + 0x00)
 
 /* ADC control register 1 (ADC_CR1) */
-#define ADC_CR1(block)                  MMIO32(block + 0x04)
+#define ADC_CR1(block)                  MMIO32((block) + 0x04)
 
 /* ADC control register 2 (ADC_CR2) */
-#define ADC_CR2(block)                  MMIO32(block + 0x08)
+#define ADC_CR2(block)                  MMIO32((block) + 0x08)
 
 /* ADC sample time register 1 (ADC_SMPR1) */
-#define ADC_SMPR1(block)                MMIO32(block + 0x0c)
+#define ADC_SMPR1(block)                MMIO32((block) + 0x0c)
 
 /* ADC sample time register 2 (ADC_SMPR2) */
-#define ADC_SMPR2(block)                MMIO32(block + 0x10)
+#define ADC_SMPR2(block)                MMIO32((block) + 0x10)
 
 #define ADC1_SR                         ADC_SR(ADC1)
 #define ADC1_CR1                        ADC_CR1(ADC1)
@@ -180,17 +180,32 @@ specific memorymap.h header before including this header file.*/
 #define ADC_CHANNEL16           0x10
 #define ADC_CHANNEL17           0x11
 #define ADC_CHANNEL18           0x12
-
+/**@}*/
 #define ADC_CHANNEL_MASK        0x1F
 
 
 /* --- ADC_SR values ------------------------------------------------------- */
+/****************************************************************************/
+/** @defgroup adc_sr_values ADC Status Register Flags
+@ingroup STM32xx_adc_defines
 
+@{*/
+
+/* STRT:*//** Regular channel Start flag */
 #define ADC_SR_STRT                     (1 << 4)
+
+/* JSTRT:*//** Injected channel Start flag */
 #define ADC_SR_JSTRT                    (1 << 3)
+
+/* JEOC:*//** Injected channel end of conversion */
 #define ADC_SR_JEOC                     (1 << 2)
+
+/* EOC:*//** End of conversion */
 #define ADC_SR_EOC                      (1 << 1)
+
+/* AWD:*//** Analog watchdog flag */
 #define ADC_SR_AWD                      (1 << 0)
+/**@}*/
 
 /* --- ADC_CR1 values ------------------------------------------------------ */
 
@@ -287,7 +302,7 @@ specific memorymap.h header before including this header file.*/
 /* DMA: Direct memory access mode. (ADC1 and ADC3 only!) */
 #define ADC_CR2_DMA                     (1 << 8)
 
-/* CONT: Continous conversion. */
+/* CONT: Continuous conversion. */
 #define ADC_CR2_CONT                    (1 << 1)
 
 /* ADON: A/D converter On/Off. */
@@ -357,7 +372,7 @@ specific memorymap.h header before including this header file.*/
 BEGIN_DECLS
 
 void adc_power_on(uint32_t adc);
-void adc_off(uint32_t adc);
+void adc_power_off(uint32_t adc);
 void adc_enable_analog_watchdog_regular(uint32_t adc);
 void adc_disable_analog_watchdog_regular(uint32_t adc);
 void adc_enable_analog_watchdog_injected(uint32_t adc);
@@ -396,6 +411,8 @@ void adc_start_conversion_regular(uint32_t adc);
 void adc_start_conversion_injected(uint32_t adc);
 void adc_enable_dma(uint32_t adc);
 void adc_disable_dma(uint32_t adc);
+bool adc_get_flag(uint32_t adc, uint32_t flag);
+void adc_clear_flag(uint32_t adc, uint32_t flag);
 
 /* common methods that have slight differences */
 void adc_set_sample_time(uint32_t adc, uint8_t channel, uint8_t time);
@@ -406,5 +423,7 @@ void adc_disable_external_trigger_injected(uint32_t adc);
 END_DECLS
 
 #endif
-#endif	/* ADC_COMMON_V1_H */
+/** @cond */
+#endif
+/** @endcond */
 /**@}*/

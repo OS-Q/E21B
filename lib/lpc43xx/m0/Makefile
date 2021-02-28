@@ -22,14 +22,13 @@
 LIBNAME		= libopencm3_lpc43xx_m0
 SRCLIBDIR	?= ../..
 
-PREFIX		?= arm-none-eabi
-#PREFIX		?= arm-elf
-CC		= $(PREFIX)-gcc
-AR		= $(PREFIX)-ar
-CFLAGS		= -O2 -Wall -Wextra -I../../../include -fno-common \
+CC		= $(PREFIX)gcc
+AR		= $(PREFIX)ar
+TGT_CFLAGS	= -O2 -Wall -Wextra -I../../../include -fno-common \
 		  -mcpu=cortex-m0 -mthumb -Wstrict-prototypes \
 		  -ffunction-sections -fdata-sections -MD -DLPC43XX -DLPC43XX_M0
-CFLAGS          += $(DEBUG_FLAGS)
+TGT_CFLAGS      += $(DEBUG_FLAGS)
+TGT_CFLAGS	+= $(STANDARD_FLAGS)
 # ARFLAGS	= rcsv
 ARFLAGS		= rcs
 

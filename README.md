@@ -1,13 +1,9 @@
-﻿# [Framework N04](https://github.com/OS-Q/N04)
+﻿# [libopencm3](https://github.com/OS-Q/libopencm3)
 
 [![sites](http://182.61.61.133/link/resources/OSQ.png)](http://www.OS-Q.com)
 
-#### 关于系统架构：[OS-Q](https://github.com/OS-Q)
-#### 归属边缘体系：[EDGE-Q](https://github.com/EDGE-Q)
+### [F简介](https://github.com/OS-Q/libopencm3/wiki)
 
-### [Framework 描述](https://github.com/OS-Q/N04/wiki) 
+[libopencm3](https://github.com/OS-Q/libopencm3)
 
-[Framework N04](https://github.com/OS-Q/N04) 基于PlatformIO平台，应用 [libopencm3](http://www.libopencm3.org) 框架
-
-### [OS-Q = Open Solutions | Open Source |  Operating System ](http://www.OS-Q.com/N04)
-####  2019-9-9
+### [Q = (OpenSource & OperatingSystem) ](http://www.OS-Q.com)

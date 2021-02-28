@@ -43,41 +43,37 @@ LGPL License Terms @ref lgpl_license
 /* --- Convenience macros -------------------------------------------------- */
 
 /* ADC injected channel data offset register x (ADC_JOFRx) (x=1..4) */
-#define ADC_JOFR1(block)		MMIO32(block + 0x14)
-#define ADC_JOFR2(block)		MMIO32(block + 0x18)
-#define ADC_JOFR3(block)		MMIO32(block + 0x1c)
-#define ADC_JOFR4(block)		MMIO32(block + 0x20)
+#define ADC_JOFR1(block)		MMIO32((block) + 0x14)
+#define ADC_JOFR2(block)		MMIO32((block) + 0x18)
+#define ADC_JOFR3(block)		MMIO32((block) + 0x1c)
+#define ADC_JOFR4(block)		MMIO32((block) + 0x20)
 
 /* ADC watchdog high threshold register (ADC_HTR) */
-#define ADC_HTR(block)			MMIO32(block + 0x24)
+#define ADC_HTR(block)			MMIO32((block) + 0x24)
 
 /* ADC watchdog low threshold register (ADC_LTR) */
-#define ADC_LTR(block)			MMIO32(block + 0x28)
+#define ADC_LTR(block)			MMIO32((block) + 0x28)
 
 /* ADC regular sequence register 1 (ADC_SQR1) */
-#define ADC_SQR1(block)			MMIO32(block + 0x2c)
+#define ADC_SQR1(block)			MMIO32((block) + 0x2c)
 
 /* ADC regular sequence register 2 (ADC_SQR2) */
-#define ADC_SQR2(block)			MMIO32(block + 0x30)
+#define ADC_SQR2(block)			MMIO32((block) + 0x30)
 
 /* ADC regular sequence register 3 (ADC_SQR3) */
-#define ADC_SQR3(block)			MMIO32(block + 0x34)
+#define ADC_SQR3(block)			MMIO32((block) + 0x34)
 
 /* ADC injected sequence register (ADC_JSQR) */
-#define ADC_JSQR(block)			MMIO32(block + 0x38)
+#define ADC_JSQR(block)			MMIO32((block) + 0x38)
 
 /* ADC injected data register x (ADC_JDRx) (x=1..4) */
-#define ADC_JDR1(block)			MMIO32(block + 0x3c)
-#define ADC_JDR2(block)			MMIO32(block + 0x40)
-#define ADC_JDR3(block)			MMIO32(block + 0x44)
-#define ADC_JDR4(block)			MMIO32(block + 0x48)
+#define ADC_JDR1(block)			MMIO32((block) + 0x3c)
+#define ADC_JDR2(block)			MMIO32((block) + 0x40)
+#define ADC_JDR3(block)			MMIO32((block) + 0x44)
+#define ADC_JDR4(block)			MMIO32((block) + 0x48)
 
 /* ADC regular data register (ADC_DR) */
-#define ADC_DR(block)			MMIO32(block + 0x4c)
-
-/* --- ADC Channels ------------------------------------------------------- */
-#define ADC_CHANNEL_TEMP        ADC_CHANNEL16
-#define ADC_CHANNEL_VREFINT     ADC_CHANNEL17
+#define ADC_DR(block)			MMIO32((block) + 0x4c)
 
 
 /* --- ADC_CR1 values ------------------------------------------------------ */
@@ -273,7 +269,7 @@ and ADC2
 /* CAL: A/D Calibration. */
 #define ADC_CR2_CAL			(1 << 2)
 
-/* CONT: Continous conversion. */
+/* CONT: Continuous conversion. */
 #define ADC_CR2_CONT			(1 << 1)
 
 /* ADON: A/D converter On/Off. */
@@ -293,14 +289,14 @@ and ADC2
 #define ADC_SMPR1_SMP12_LSB		6
 #define ADC_SMPR1_SMP11_LSB		3
 #define ADC_SMPR1_SMP10_LSB		0
-#define ADC_SMPR1_SMP17_MSK		(0x7 << ADC_SMP17_LSB)
-#define ADC_SMPR1_SMP16_MSK		(0x7 << ADC_SMP16_LSB)
-#define ADC_SMPR1_SMP15_MSK		(0x7 << ADC_SMP15_LSB)
-#define ADC_SMPR1_SMP14_MSK		(0x7 << ADC_SMP14_LSB)
-#define ADC_SMPR1_SMP13_MSK		(0x7 << ADC_SMP13_LSB)
-#define ADC_SMPR1_SMP12_MSK		(0x7 << ADC_SMP12_LSB)
-#define ADC_SMPR1_SMP11_MSK		(0x7 << ADC_SMP11_LSB)
-#define ADC_SMPR1_SMP10_MSK		(0x7 << ADC_SMP10_LSB)
+#define ADC_SMPR1_SMP17_MSK		(0x7 << ADC_SMPR1_SMP17_LSB)
+#define ADC_SMPR1_SMP16_MSK		(0x7 << ADC_SMPR1_SMP16_LSB)
+#define ADC_SMPR1_SMP15_MSK		(0x7 << ADC_SMPR1_SMP15_LSB)
+#define ADC_SMPR1_SMP14_MSK		(0x7 << ADC_SMPR1_SMP14_LSB)
+#define ADC_SMPR1_SMP13_MSK		(0x7 << ADC_SMPR1_SMP13_LSB)
+#define ADC_SMPR1_SMP12_MSK		(0x7 << ADC_SMPR1_SMP12_LSB)
+#define ADC_SMPR1_SMP11_MSK		(0x7 << ADC_SMPR1_SMP11_LSB)
+#define ADC_SMPR1_SMP10_MSK		(0x7 << ADC_SMPR1_SMP10_LSB)
 
 /* --- ADC_SMPR2 values ---------------------------------------------------- */
 
@@ -314,16 +310,16 @@ and ADC2
 #define ADC_SMPR2_SMP2_LSB		6
 #define ADC_SMPR2_SMP1_LSB		3
 #define ADC_SMPR2_SMP0_LSB		0
-#define ADC_SMPR2_SMP9_MSK		(0x7 << ADC_SMP9_LSB)
-#define ADC_SMPR2_SMP8_MSK		(0x7 << ADC_SMP8_LSB)
-#define ADC_SMPR2_SMP7_MSK		(0x7 << ADC_SMP7_LSB)
-#define ADC_SMPR2_SMP6_MSK		(0x7 << ADC_SMP6_LSB)
-#define ADC_SMPR2_SMP5_MSK		(0x7 << ADC_SMP5_LSB)
-#define ADC_SMPR2_SMP4_MSK		(0x7 << ADC_SMP4_LSB)
-#define ADC_SMPR2_SMP3_MSK		(0x7 << ADC_SMP3_LSB)
-#define ADC_SMPR2_SMP2_MSK		(0x7 << ADC_SMP2_LSB)
-#define ADC_SMPR2_SMP1_MSK		(0x7 << ADC_SMP1_LSB)
-#define ADC_SMPR2_SMP0_MSK		(0x7 << ADC_SMP0_LSB)
+#define ADC_SMPR2_SMP9_MSK		(0x7 << ADC_SMPR2_SMP9_LSB)
+#define ADC_SMPR2_SMP8_MSK		(0x7 << ADC_SMPR2_SMP8_LSB)
+#define ADC_SMPR2_SMP7_MSK		(0x7 << ADC_SMPR2_SMP7_LSB)
+#define ADC_SMPR2_SMP6_MSK		(0x7 << ADC_SMPR2_SMP6_LSB)
+#define ADC_SMPR2_SMP5_MSK		(0x7 << ADC_SMPR2_SMP5_LSB)
+#define ADC_SMPR2_SMP4_MSK		(0x7 << ADC_SMPR2_SMP4_LSB)
+#define ADC_SMPR2_SMP3_MSK		(0x7 << ADC_SMPR2_SMP3_LSB)
+#define ADC_SMPR2_SMP2_MSK		(0x7 << ADC_SMPR2_SMP2_LSB)
+#define ADC_SMPR2_SMP1_MSK		(0x7 << ADC_SMPR2_SMP1_LSB)
+#define ADC_SMPR2_SMP0_MSK		(0x7 << ADC_SMPR2_SMP0_LSB)
 
 /* --- ADC_SMPRx values --------------------------------------------------- */
 /****************************************************************************/
@@ -397,21 +393,30 @@ and ADC2
 #define ADC_ADC2DATA_MSK		(0xffff << ADC_ADC2DATA_LSB)
 					/* ADC1 only (dual mode) */
 
+/** @defgroup adc_channel ADC Channel Numbers
+ * @ingroup adc_defines
+ *
+ *@{*/
+#define ADC_CHANNEL_TEMP	16
+#define ADC_CHANNEL_VREF	17
+/**@}*/
+
 /* --- Function prototypes ------------------------------------------------- */
 
 BEGIN_DECLS
 
 void adc_start_conversion_direct(uint32_t adc);
-void adc_set_single_channel(uint32_t adc, uint8_t channel);
 void adc_set_dual_mode(uint32_t mode);
-void adc_enable_temperature_sensor(uint32_t adc);
-void adc_disable_temperature_sensor(uint32_t adc);
+void adc_enable_temperature_sensor(void);
+void adc_disable_temperature_sensor(void);
 void adc_enable_external_trigger_regular(uint32_t adc, uint32_t trigger);
 void adc_enable_external_trigger_injected(uint32_t adc, uint32_t trigger);
 void adc_reset_calibration(uint32_t adc);
-void adc_calibration(uint32_t adc);
-void adc_on(uint32_t adc)
-	LIBOPENCM3_DEPRECATED("will be removed in the first release");
+void adc_calibration(uint32_t adc)
+	LIBOPENCM3_DEPRECATED("see adc_calibrate/_async");
+void adc_calibrate_async(uint32_t adc);
+bool adc_is_calibrating(uint32_t adc);
+void adc_calibrate(uint32_t adc);
 
 END_DECLS
 

@@ -20,7 +20,11 @@
 #ifndef LIBOPENCM3_CM3_ITM_H
 #define LIBOPENCM3_CM3_ITM_H
 
-/* Cortex-M3 Instrumentation Trace Macrocell (ITM) */
+/**
+ * @defgroup cm_itm Cortex-M Instrumentation Trace Macrocell (ITM)
+ * @ingroup CM3_defines
+ * @{
+ */
 
 /* Those defined only on ARMv7 and above */
 #if !defined(__ARM_ARCH_7M__) && !defined(__ARM_ARCH_7EM__)
@@ -30,9 +34,9 @@
 /* --- ITM registers ------------------------------------------------------- */
 
 /* Stimulus Port x (ITM_STIM<sz>(x)) */
-#define ITM_STIM8(n)			(MMIO8(ITM_BASE + (n*4)))
-#define ITM_STIM16(n)			(MMIO16(ITM_BASE + (n*4)))
-#define ITM_STIM32(n)			(MMIO32(ITM_BASE + (n*4)))
+#define ITM_STIM8(n)			(MMIO8(ITM_BASE + ((n)*4)))
+#define ITM_STIM16(n)			(MMIO16(ITM_BASE + ((n)*4)))
+#define ITM_STIM32(n)			(MMIO32(ITM_BASE + ((n)*4)))
 
 /* Trace Enable ports (ITM_TER[x]) */
 #define ITM_TER				(&MMIO32(ITM_BASE + 0xE00))
@@ -44,9 +48,9 @@
 #define ITM_TCR				MMIO32(ITM_BASE + 0xE80)
 
 /* CoreSight Lock Status Register for this peripheral */
-#define ITM_LSR			MMIO32(ITM_BASE + 0xFB4)
+#define ITM_LSR			MMIO32(ITM_BASE + CORESIGHT_LSR_OFFSET)
 /* CoreSight Lock Access Register for this peripheral */
-#define ITM_LAR			MMIO32(ITM_BASE + 0xFB0)
+#define ITM_LAR			MMIO32(ITM_BASE + CORESIGHT_LAR_OFFSET)
 
 /* TODO: PID, CID */
 
@@ -84,5 +88,7 @@
 #define ITM_TCR_SYNCENA			(1 << 2)
 #define ITM_TCR_TSENA			(1 << 1)
 #define ITM_TCR_ITMENA			(1 << 0)
+
+/**@}*/
 
 #endif

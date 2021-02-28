@@ -1,4 +1,5 @@
-/** @addtogroup adc_file
+/** @addtogroup adc_file ADC peripheral API
+@ingroup peripheral_apis
 
 @author @htmlonly &copy; @endhtmlonly
 2009 Edward Cheeseman <evbuilder@users.sourceforge.net>
@@ -52,16 +53,14 @@ and ADC, reset ADC and set the prescaler divider. Set dual mode to independent
 (default). Enable triggering for a software trigger.
 
 @code
-    rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_ADC1EN);
-    adc_off(ADC1);
-    rcc_peripheral_reset(&RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);
-    rcc_peripheral_clear_reset(&RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);
+    rcc_periph_clock_enable(RCC_ADC1);
+    adc_power_off(ADC1);
+    rcc_periph_reset_pulse(RST_ADC1);
     rcc_set_adcpre(RCC_CFGR_ADCPRE_PCLK2_DIV2);
     adc_set_dual_mode(ADC_CR1_DUALMOD_IND);
     adc_disable_scan_mode(ADC1);
     adc_set_single_conversion_mode(ADC1);
     adc_set_sample_time(ADC1, ADC_CHANNEL0, ADC_SMPR1_SMP_1DOT5CYC);
-    adc_set_single_channel(ADC1, ADC_CHANNEL0);
     adc_enable_trigger(ADC1, ADC_CR2_EXTSEL_SWSTART);
     adc_power_on(ADC1);
     adc_reset_calibration(ADC1);
@@ -106,7 +105,7 @@ Turn off the ADC to reduce power consumption to a few microamps.
 adc_reg_base.
 */
 
-void adc_off(uint32_t adc)
+void adc_power_off(uint32_t adc)
 {
 	ADC_CR2(adc) &= ~ADC_CR2_ADON;
 }
@@ -115,8 +114,7 @@ void adc_off(uint32_t adc)
 /** @brief ADC Enable Analog Watchdog for Regular Conversions
 
 The analog watchdog allows the monitoring of an analog signal between two
-threshold levels. The thresholds must be preset. Comparison is done before data
-alignment takes place, so the thresholds are left-aligned.
+threshold levels. The thresholds must be preset.
 
 @param[in] adc Unsigned int32. ADC block register address base @ref
 adc_reg_base.
@@ -531,7 +529,7 @@ void adc_set_single_conversion_mode(uint32_t adc)
 /** @brief ADC Set Analog Watchdog Upper Threshold
 
 @param[in] adc Unsigned int32. ADC block register address base @ref adc_reg_base
-@param[in] threshold Unsigned int8. Upper threshold value
+@param[in] threshold Upper threshold value, 12bit right aligned.
 */
 
 void adc_set_watchdog_high_threshold(uint32_t adc, uint16_t threshold)
@@ -547,7 +545,7 @@ void adc_set_watchdog_high_threshold(uint32_t adc, uint16_t threshold)
 /** @brief ADC Set Analog Watchdog Lower Threshold
 
 @param[in] adc Unsigned int32. ADC block register address base @ref adc_reg_base
-@param[in] threshold Unsigned int8. Lower threshold value
+@param[in] threshold Lower threshold value, 12bit right aligned.
 */
 
 void adc_set_watchdog_low_threshold(uint32_t adc, uint16_t threshold)
@@ -590,16 +588,16 @@ void adc_set_regular_sequence(uint32_t adc, uint8_t length, uint8_t channel[])
 		if (i <= 6) {
 			first6 |= (channel[i - 1] << ((i - 1) * 5));
 		}
-		if ((i > 6) & (i <= 12)) {
+		if ((i > 6) && (i <= 12)) {
 			second6 |= (channel[i - 1] << ((i - 6 - 1) * 5));
 		}
-		if ((i > 12) & (i <= 18)) {
+		if ((i > 12) && (i <= 18)) {
 			third6 |= (channel[i - 1] << ((i - 12 - 1) * 5));
 		}
-		if ((i > 18) & (i <= 24)) {
+		if ((i > 18) && (i <= 24)) {
 			fourth6 |= (channel[i - 1] << ((i - 18 - 1) * 5));
 		}
-		if ((i > 24) & (i <= 28)) {
+		if ((i > 24) && (i <= 28)) {
 			fifth6 |= (channel[i - 1] << ((i - 24 - 1) * 5));
 		}
 	}
@@ -750,6 +748,32 @@ void adc_disable_dma(uint32_t adc)
 	ADC_CR2(adc) &= ~ADC_CR2_DMA;
 }
 
+/*---------------------------------------------------------------------------*/
+/** @brief Read a Status Flag.
 
+@param[in] adc Unsigned int32. ADC register address base @ref adc_reg_base
+@param[in] flag Unsigned int32. Status register flag  @ref adc_sr_values.
+@returns boolean: flag set.
+*/
+
+bool adc_get_flag(uint32_t adc, uint32_t flag)
+{
+	return ADC_SR(adc) & flag;
+}
+
+/*---------------------------------------------------------------------------*/
+/** @brief Clear a Status Flag.
+
+@param[in] adc Unsigned int32. ADC register address base @ref adc_reg_base
+@param[in] flag Unsigned int32. Status register flag  @ref adc_sr_values.
+*/
+
+void adc_clear_flag(uint32_t adc, uint32_t flag)
+{
+	/* All defined bits are 'r' or 'rc_w0' */
+	ADC_SR(adc) = ~flag;
+}
+
+/*---------------------------------------------------------------------------*/
 
 /**@}*/

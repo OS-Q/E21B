@@ -1,6 +1,6 @@
-/** @defgroup flash_file FLASH
+/** @defgroup flash_file FLASH peripheral API
  *
- * @ingroup STM32F1xx
+ * @ingroup peripheral_apis
  *
  * @brief <b>libopencm3 STM32F1xx FLASH Memory</b>
  *
@@ -59,10 +59,8 @@
 
 /**@{*/
 
+#include <libopencm3/stm32/desig.h>
 #include <libopencm3/stm32/flash.h>
-
-/* Memory Size Register */
-#define MEMORY_SIZE_REG			MMIO32(DESIG_FLASH_SIZE_BASE)
 
 /*---------------------------------------------------------------------------*/
 /** @brief Enable the FLASH Half Cycle Mode
@@ -99,7 +97,7 @@ It is locked by default on reset.
 
 void flash_unlock_upper(void)
 {
-	if (MEMORY_SIZE_REG > 512) {
+	if (desig_get_flash_size() > 512) {
 
 		/* Clear the unlock state. */
 		FLASH_CR2 |= FLASH_CR_LOCK;
@@ -128,8 +126,9 @@ void flash_lock_upper(void)
 
 void flash_clear_pgerr_flag_upper(void)
 {
-	if (MEMORY_SIZE_REG > 512)
+	if (desig_get_flash_size() > 512) {
 		FLASH_SR2 |= FLASH_SR_PGERR;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -139,8 +138,9 @@ void flash_clear_pgerr_flag_upper(void)
 
 void flash_clear_eop_flag_upper(void)
 {
-	if (MEMORY_SIZE_REG > 512)
+	if (desig_get_flash_size() > 512) {
 		FLASH_SR2 |= FLASH_SR_EOP;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -150,19 +150,9 @@ void flash_clear_eop_flag_upper(void)
 
 void flash_clear_wrprterr_flag_upper(void)
 {
-	if (MEMORY_SIZE_REG > 512)
+	if (desig_get_flash_size() > 512) {
 		FLASH_SR2 |= FLASH_SR_WRPRTERR;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Clear the Busy Status Flag, upper Bank
-
-*/
-
-void flash_clear_bsy_flag_upper(void)
-{
-	if (MEMORY_SIZE_REG > 512)
-		FLASH_SR2 &= ~FLASH_SR_BSY;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -176,12 +166,10 @@ void flash_clear_status_flags(void)
 	flash_clear_pgerr_flag();
 	flash_clear_eop_flag();
 	flash_clear_wrprterr_flag();
-	flash_clear_bsy_flag();
-	if (MEMORY_SIZE_REG > 512) {
+	if (desig_get_flash_size() > 512) {
 		flash_clear_pgerr_flag_upper();
 		flash_clear_eop_flag_upper();
 		flash_clear_wrprterr_flag_upper();
-		flash_clear_bsy_flag_upper();
 	}
 }
 
@@ -204,12 +192,14 @@ uint32_t flash_get_status_flags(void)
 			FLASH_SR_EOP |
 			FLASH_SR_WRPRTERR |
 			FLASH_SR_BSY));
-	if (MEMORY_SIZE_REG > 512)
+	if (desig_get_flash_size() > 512) {
 		flags |= (FLASH_SR2 & (FLASH_SR_PGERR |
 			FLASH_SR_EOP |
 			FLASH_SR_WRPRTERR |
 			FLASH_SR_BSY));
-    return flags;
+	}
+
+	return flags;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -221,25 +211,29 @@ was not properly erased.
 
 Status bit polling is used to detect end of operation.
 
-@param[in] uint32_t address. Full address of flash half word to be programmed.
-@param[in] uint16_t data.
+@param[in] address Full address of flash half word to be programmed.
+@param[in] data half word to write
 */
 
 void flash_program_half_word(uint32_t address, uint16_t data)
 {
 	flash_wait_for_last_operation();
 
-	if ((MEMORY_SIZE_REG > 512) && (address >= FLASH_BASE+0x00080000))
+	if ((desig_get_flash_size() > 512) && (address >= FLASH_BASE+0x00080000)) {
 		FLASH_CR2 |= FLASH_CR_PG;
-	else FLASH_CR |= FLASH_CR_PG;
+	} else {
+		FLASH_CR |= FLASH_CR_PG;
+	}
 
 	MMIO16(address) = data;
 
 	flash_wait_for_last_operation();
 
-	if ((MEMORY_SIZE_REG > 512) && (address >= FLASH_BASE+0x00080000))
+	if ((desig_get_flash_size() > 512) && (address >= FLASH_BASE+0x00080000)) {
 		FLASH_CR2 &= ~FLASH_CR_PG;
-	else FLASH_CR &= ~FLASH_CR_PG;
+	} else {
+		FLASH_CR &= ~FLASH_CR_PG;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -252,14 +246,15 @@ first be fully erased before attempting to program it.
 Note that the page sizes differ between devices. See the reference manual or
 the FLASH programming manual for details.
 
-@param[in] uint32_t page_address. Full address of flash page to be erased.
+@param[in] page_address Full address of flash page to be erased.
 */
 
 void flash_erase_page(uint32_t page_address)
 {
 	flash_wait_for_last_operation();
 
-	if ((MEMORY_SIZE_REG > 512) && (page_address >= FLASH_BASE+0x00080000)) {
+	if ((desig_get_flash_size() > 512)
+	    && (page_address >= FLASH_BASE+0x00080000)) {
 		FLASH_CR2 |= FLASH_CR_PER;
 		FLASH_AR2 = page_address;
 		FLASH_CR2 |= FLASH_CR_STRT;
@@ -271,10 +266,12 @@ void flash_erase_page(uint32_t page_address)
 
 	flash_wait_for_last_operation();
 
-	if ((MEMORY_SIZE_REG > 512) && (page_address >= FLASH_BASE+0x00080000))
+	if ((desig_get_flash_size() > 512)
+	    && (page_address >= FLASH_BASE+0x00080000)) {
 		FLASH_CR2 &= ~FLASH_CR_PER;
-	else
+	} else {
 		FLASH_CR &= ~FLASH_CR_PER;
+	}
 }
 
 /*---------------------------------------------------------------------------*/

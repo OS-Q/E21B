@@ -20,33 +20,43 @@
 LIBNAME		= libopencm3_stm32f0
 SRCLIBDIR	?= ../..
 
-PREFIX		?= arm-none-eabi
-#PREFIX		?= arm-elf
-CC		= $(PREFIX)-gcc
-AR		= $(PREFIX)-ar
-CFLAGS		= -Os \
+CC		= $(PREFIX)gcc
+AR		= $(PREFIX)ar
+TGT_CFLAGS	= -Os \
 		  -Wall -Wextra -Wimplicit-function-declaration \
 		  -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes \
 		  -Wundef -Wshadow \
 		  -I../../../include -fno-common \
 		  -mcpu=cortex-m0 $(FP_FLAGS) -mthumb -Wstrict-prototypes \
 		  -ffunction-sections -fdata-sections -MD -DSTM32F0
-CFLAGS          += $(DEBUG_FLAGS)
+TGT_CFLAGS      += $(DEBUG_FLAGS)
+TGT_CFLAGS	+= $(STANDARD_FLAGS)
 
 ARFLAGS		= rcs
 
-OBJS		= flash.o rcc.o usart.o dma.o rtc.o comparator.o crc.o \
-                  dac.o i2c.o iwdg.o pwr.o gpio.o timer.o adc.o desig.o
+OBJS += adc.o adc_common_v2.o
+OBJS += can.o
+OBJS += comparator.o
+OBJS += crc_common_all.o crc_v2.o
+OBJS += crs_common_all.o
+OBJS += dac_common_all.o
+OBJS += desig_common_all.o desig_common_v1.o
+OBJS += dma_common_l1f013.o dma_common_csel.o
+OBJS += exti_common_all.o
+OBJS += flash.o flash_common_all.o flash_common_f.o flash_common_f01.o
+OBJS += gpio_common_all.o gpio_common_f0234.o
+OBJS += iwdg_common_all.o
+OBJS += i2c_common_v2.o
+OBJS += pwr_common_v1.o
+OBJS += rcc.o rcc_common_all.o
+OBJS += rtc_common_l1f024.o
+OBJS += spi_common_all.o spi_common_v2.o
+OBJS += timer_common_all.o timer_common_f0234.o
+OBJS += usart_common_all.o usart_common_v2.o
 
-OBJS            += gpio_common_all.o gpio_common_f0234.o crc_common_all.o \
-                   pwr_common_all.o iwdg_common_all.o rtc_common_l1f024.o \
-                   dma_common_l1f013.o exti_common_all.o spi_common_all.o \
-		   spi_common_f03.o flash_common_f01.o dac_common_all.o \
-		   timer_common_all.o rcc_common_all.o
-OBJS		+= crs_common_all.o
-
-OBJS		+= usb.o usb_control.o usb_standard.o
-OBJS		+= st_usbfs_core.o st_usbfs_v2.o
+OBJS += usb.o usb_control.o usb_standard.o usb_msc.o
+OBJS += usb_hid.o
+OBJS += st_usbfs_core.o st_usbfs_v2.o
 
 VPATH += ../../usb:../:../../cm3:../common
 

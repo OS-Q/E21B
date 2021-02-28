@@ -26,14 +26,13 @@
 /* load the weak symbols for IRQ_HANDLERS */
 #include "../dispatch/vector_nvic.c"
 
-/* Symbols exported by the linker script(s): */
-extern unsigned _data_loadaddr, _data, _edata, _ebss, _stack;
+/* Less common symbols exported by the linker script(s): */
 typedef void (*funcp_t) (void);
 extern funcp_t __preinit_array_start, __preinit_array_end;
 extern funcp_t __init_array_start, __init_array_end;
 extern funcp_t __fini_array_start, __fini_array_end;
 
-void main(void);
+int main(void);
 void blocking_handler(void);
 void null_handler(void);
 
@@ -60,7 +59,7 @@ vector_table_t vector_table = {
 	}
 };
 
-void WEAK __attribute__ ((naked)) reset_handler(void)
+void __attribute__ ((weak)) reset_handler(void)
 {
 	volatile unsigned *src, *dest;
 	funcp_t *fp;
@@ -91,7 +90,7 @@ void WEAK __attribute__ ((naked)) reset_handler(void)
 	}
 
 	/* Call the application's entry point. */
-	main();
+	(void)main();
 
 	/* Destructors. */
 	for (fp = &__fini_array_start; fp < &__fini_array_end; fp++) {

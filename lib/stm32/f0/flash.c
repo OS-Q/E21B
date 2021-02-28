@@ -1,6 +1,6 @@
-/** @defgroup flash_file FLASH
+/** @defgroup flash_file FLASH peripheral API
  *
- * @ingroup STM32F0xx
+ * @ingroup peripheral_apis
  *
  * @brief <b>libopencm3 STM32F05x FLASH</b>
  *
@@ -61,7 +61,6 @@ void flash_clear_status_flags(void)
 	flash_clear_pgerr_flag();
 	flash_clear_eop_flag();
 	flash_clear_wrprterr_flag();
-	flash_clear_bsy_flag();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -76,10 +75,10 @@ error, bit 5: end of operation.
 
 uint32_t flash_get_status_flags(void)
 {
-	return (FLASH_SR & (FLASH_SR_PGERR |
+	return FLASH_SR & (FLASH_SR_PGERR |
 			FLASH_SR_EOP |
 			FLASH_SR_WRPRTERR |
-			FLASH_SR_BSY));
+			FLASH_SR_BSY);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -91,8 +90,8 @@ was not properly erased.
 
 Status bit polling is used to detect end of operation.
 
-@param[in] uint32_t address. Full address of flash half word to be programmed.
-@param[in] uint16_t data.
+@param[in] address Full address of flash half word to be programmed.
+@param[in] data half word to write
 */
 
 void flash_program_half_word(uint32_t address, uint16_t data)
@@ -118,7 +117,7 @@ first be fully erased before attempting to program it.
 Note that the page sizes differ between devices. See the reference manual or
 the FLASH programming manual for details.
 
-@param[in] uint32_t page_address. Full address of flash page to be erased.
+@param[in] page_address Full address of flash page to be erased.
 */
 
 void flash_erase_page(uint32_t page_address)

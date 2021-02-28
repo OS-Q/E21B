@@ -23,8 +23,8 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA SPI.H
-The order of header inclusion is important. spi.h includes the device
+/* THIS FILE SHOULD NOT BE INCLUDED DIRECTLY, BUT ONLY VIA SYSCFG.H
+The order of header inclusion is important. syscfg.h includes the device
 specific memorymap.h header before including this header file.*/
 
 /** @cond */
@@ -49,6 +49,10 @@ specific memorymap.h header before including this header file.*/
 #define SYSCFG_EXTICR4			SYSCFG_EXTICR(3)
 
 #define SYSCFG_CMPCR			MMIO32(SYSCFG_BASE + 0x20)
+
+/* --- SYSCFG_EXTICR Values -------------------------------------------------*/
+
+#define SYSCFG_EXTICR_FIELDSIZE		4
 
 #endif
 /**@}*/

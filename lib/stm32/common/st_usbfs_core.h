@@ -33,7 +33,7 @@
 #define USBD_PM_TOP 0x40
 
 void st_usbfs_set_address(usbd_device *dev, uint8_t addr);
-void st_usbfs_set_ep_rx_bufsize(usbd_device *dev, uint8_t ep, uint32_t size);
+uint16_t st_usbfs_set_ep_rx_bufsize(usbd_device *dev, uint8_t ep, uint32_t size);
 
 void st_usbfs_ep_setup(usbd_device *usbd_dev, uint8_t addr,
 		uint8_t type, uint16_t max_size,
@@ -44,8 +44,10 @@ void st_usbfs_endpoints_reset(usbd_device *usbd_dev);
 void st_usbfs_ep_stall_set(usbd_device *usbd_dev, uint8_t addr, uint8_t stall);
 uint8_t st_usbfs_ep_stall_get(usbd_device *usbd_dev, uint8_t addr);
 void st_usbfs_ep_nak_set(usbd_device *usbd_dev, uint8_t addr, uint8_t nak);
-uint16_t st_usbfs_ep_write_packet(usbd_device *usbd_dev, uint8_t addr, const void *buf, uint16_t len);
-uint16_t st_usbfs_ep_read_packet(usbd_device *usbd_dev, uint8_t addr, void *buf, uint16_t len);
+uint16_t st_usbfs_ep_write_packet(usbd_device *usbd_dev, uint8_t addr,
+				  const void *buf, uint16_t len);
+uint16_t st_usbfs_ep_read_packet(usbd_device *usbd_dev, uint8_t addr,
+				 void *buf, uint16_t len);
 void st_usbfs_poll(usbd_device *usbd_dev);
 
 /* These must be implemented by the device specific driver */

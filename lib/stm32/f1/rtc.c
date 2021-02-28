@@ -1,6 +1,6 @@
-/** @defgroup rtc_file RTC
+/** @defgroup rtc_file RTC peripheral API
  *
- * @ingroup STM32F1xx
+ * @ingroup peripheral_apis
  *
  * @brief <b>libopencm3 STM32F1xx RTC</b>
  *
@@ -96,10 +96,15 @@ void rtc_awake_from_off(enum rcc_osc clock_source)
 	/* Set the clock source */
 	rcc_set_rtc_clock_source(clock_source);
 
-	/* Clear the RTC Registers */
-	rtc_enter_config_mode();
+	/* Clear the RTC Control Register */
 	RTC_CRH = 0;
-	RTC_CRL = 0x20;
+	RTC_CRL = 0;
+
+	/* Enable the RTC. */
+	rcc_enable_rtc_clock();
+
+	/* Clear the Registers */
+	rtc_enter_config_mode();
 	RTC_PRLH = 0;
 	RTC_PRLL = 0;
 	RTC_CNTH = 0;
@@ -108,16 +113,9 @@ void rtc_awake_from_off(enum rcc_osc clock_source)
 	RTC_ALRL = 0xFFFF;
 	rtc_exit_config_mode();
 
-	/* Enable the RTC. */
-	rcc_enable_rtc_clock();
-
 	/* Wait for the RSF bit in RTC_CRL to be set by hardware. */
 	RTC_CRL &= ~RTC_CRL_RSF;
 	while ((reg32 = (RTC_CRL & RTC_CRL_RSF)) == 0);
-
-	/* Wait for the last write operation to finish. */
-	/* TODO: Necessary? */
-	while ((reg32 = (RTC_CRL & RTC_CRL_RTOFF)) == 0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -243,7 +241,7 @@ uint32_t rtc_get_alarm_val(void)
 /*---------------------------------------------------------------------------*/
 /** @brief RTC set the Counter
 
-@param[in] uint32_t counter_val: 32 bit time setting for the counter.
+@param[in] counter_val 32 bit time setting for the counter.
 */
 
 void rtc_set_counter_val(uint32_t counter_val)

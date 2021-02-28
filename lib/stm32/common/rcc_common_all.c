@@ -1,3 +1,6 @@
+/** @addtogroup rcc_file RCC peripheral API
+ * @ingroup peripheral_apis
+ */
 /*
  * This file is part of the libopencm3 project.
  *
@@ -28,6 +31,8 @@
  * involved, each one controlling the enabling of clocks associated with the
  * AHB, APB1 and APB2 respectively. Several peripherals could be enabled
  * simultaneously <em>only if they are controlled by the same register</em>.
+ * @sa rcc_periph_clock_enable for a less error prone version, if you only
+ * need to enable a single peripheral.
  *
  * @param[in] *reg Unsigned int32. Pointer to a Clock Enable Register
  *			 (either RCC_AHBENR, RCC_APB1ENR or RCC_APB2ENR)
@@ -50,6 +55,8 @@ void rcc_peripheral_enable_clock(volatile uint32_t *reg, uint32_t en)
  * involved, each one controlling the enabling of clocks associated with
  * the AHB, APB1 and APB2 respectively. Several peripherals could be disabled
  * simultaneously <em>only if they are controlled by the same register</em>.
+ * @sa rcc_periph_clock_disable for a less error prone version, if you only
+ * need to disable a single peripheral.
  *
  * @param[in] *reg Unsigned int32. Pointer to a Clock Enable Register
  *			 (either RCC_AHBENR, RCC_APB1ENR or RCC_APB2ENR)
@@ -71,6 +78,9 @@ void rcc_peripheral_disable_clock(volatile uint32_t *reg, uint32_t en)
  * controlling reset of peripherals associated with the AHB, APB1 and APB2
  * respectively. Several peripherals could be reset simultaneously <em>only if
  * they are controlled by the same register</em>.
+ * @sa rcc_periph_reset_hold for a less error prone version, if you only
+ * need to reset a single peripheral.
+ * @sa rcc_periph_reset_pulse if you are only going to toggle reset anyway.
  *
  * @param[in] *reg Unsigned int32. Pointer to a Reset Register
  *			 (either RCC_AHBENR, RCC_APB1ENR or RCC_APB2ENR)
@@ -91,6 +101,9 @@ void rcc_peripheral_reset(volatile uint32_t *reg, uint32_t reset)
  * involved, each one controlling reset of peripherals associated with the AHB,
  * APB1 and APB2 respectively. Several peripherals could have the reset removed
  * simultaneously <em>only if they are controlled by the same register</em>.
+ * @sa rcc_periph_reset_release for a less error prone version, if you only
+ * need to unreset a single peripheral.
+ * @sa rcc_periph_reset_pulse if you are only going to toggle reset anyway.
  *
  * @param[in] *reg Unsigned int32. Pointer to a Reset Register
  *			 (either RCC_AHBENR, RCC_APB1ENR or RCC_APB2ENR)
@@ -188,13 +201,73 @@ void rcc_periph_reset_release(enum rcc_periph_rst rst)
  * Exact sources available depend on your target.  On devices with multiple
  * MCO pins, this function controls MCO1
  *
- * @parame[in] mcosrc the unshifted source bits
+ * @param[in] mcosrc the unshifted source bits
  */
 
 void rcc_set_mco(uint32_t mcosrc)
 {
 	RCC_CFGR = (RCC_CFGR & ~(RCC_CFGR_MCO_MASK << RCC_CFGR_MCO_SHIFT)) |
 			(mcosrc << RCC_CFGR_MCO_SHIFT);
+}
+
+/**
+ * RCC Enable Bypass.
+ * Enable an external clock to bypass the internal clock (high speed and low
+ * speed clocks only). The external clock must be enabled (see @ref rcc_osc_on)
+ * and the internal clock must be disabled (see @ref rcc_osc_off) for this to
+ * have effect.
+ * @note The LSE clock is in the backup domain and cannot be bypassed until the
+ * backup domain write protection has been removed (see @ref
+ * pwr_disable_backup_domain_write_protect).
+ * @param[in] osc Oscillator ID. Only HSE and LSE have effect.
+ */
+void rcc_osc_bypass_enable(enum rcc_osc osc)
+{
+	switch (osc) {
+	case RCC_HSE:
+		RCC_CR |= RCC_CR_HSEBYP;
+		break;
+	case RCC_LSE:
+#ifdef RCC_CSR_LSEBYP
+		RCC_CSR |= RCC_CSR_LSEBYP;
+#else
+		RCC_BDCR |= RCC_BDCR_LSEBYP;
+#endif
+		break;
+	default:
+		/* Do nothing, only HSE/LSE allowed here. */
+		break;
+	}
+}
+
+/**
+ * RCC Disable Bypass.
+ * Re-enable the internal clock (high speed and low speed clocks only). The
+ * internal clock must be disabled (see @ref rcc_osc_off) for this to have
+ * effect.
+ * @note The LSE clock is in the backup domain and cannot have bypass removed
+ * until the backup domain write protection has been removed (see @ref
+ * pwr_disable_backup_domain_write_protect) or the backup domain has been reset
+ * (see @ref rcc_backupdomain_reset).
+ * @param[in] osc Oscillator ID. Only HSE and LSE have effect.
+ */
+void rcc_osc_bypass_disable(enum rcc_osc osc)
+{
+	switch (osc) {
+	case RCC_HSE:
+		RCC_CR &= ~RCC_CR_HSEBYP;
+		break;
+	case RCC_LSE:
+#ifdef RCC_CSR_LSEBYP
+		RCC_CSR &= ~RCC_CSR_LSEBYP;
+#else
+		RCC_BDCR &= ~RCC_BDCR_LSEBYP;
+#endif
+		break;
+	default:
+		/* Do nothing, only HSE/LSE allowed here. */
+		break;
+	}
 }
 
 /**@}*/

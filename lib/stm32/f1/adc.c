@@ -1,8 +1,5 @@
-/** @defgroup adc_file ADC
-
-@ingroup STM32F1xx
-
-@brief <b>libopencm3 STM32F1xx Analog to Digital Converters</b>
+/** @addtogroup adc_file ADC peripheral API
+@ingroup peripheral_apis
 
 @version 1.0.0
 
@@ -54,20 +51,18 @@ and ADC, reset ADC and set the prescaler divider. Set dual mode to independent
 (default). Enable triggering for a software trigger.
 
 @code
-	rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_ADC1EN);
-	adc_off(ADC1);
-	rcc_peripheral_reset(&RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);
-	rcc_peripheral_clear_reset(&RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);
+	rcc_periph_clock_enable(RCC_ADC1);
+	adc_power_off(ADC1);
+	rcc_periph_reset_pulse(RST_ADC1);
 	rcc_set_adcpre(RCC_CFGR_ADCPRE_PCLK2_DIV2);
 	adc_set_dual_mode(ADC_CR1_DUALMOD_IND);
 	adc_disable_scan_mode(ADC1);
 	adc_set_single_conversion_mode(ADC1);
-	adc_set_sample_time(ADC1, ADC_CHANNEL0, ADC_SMPR1_SMP_1DOT5CYC);
-	adc_set_single_channel(ADC1, ADC_CHANNEL0);
-	adc_enable_trigger(ADC1, ADC_CR2_EXTSEL_SWSTART);
+	adc_set_sample_time(ADC1, ADC_CHANNEL0, ADC_SMPR_SMP_1DOT5CYC);
+	adc_enable_external_trigger_regular(ADC1, ADC_CR2_EXTSEL_SWSTART);
 	adc_power_on(ADC1);
 	adc_reset_calibration(ADC1);
-	adc_calibration(ADC1);
+	adc_calibrate(ADC1);
 	adc_start_conversion_regular(ADC1);
 	while (! adc_eoc(ADC1));
 	reg16 = adc_read_regular(ADC1);
@@ -92,20 +87,6 @@ LGPL License Terms @ref lgpl_license
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * Basic ADC handling API.
- *
- * Examples:
- *  rcc_peripheral_enable_clock(&RCC_APB2ENR, ADC1EN);
- *  rcc_peripheral_disable_clock(&RCC_APB2ENR, ADC1EN);
- *  rcc_peripheral_reset(&RCC_APB2RSTR, ADC1RST);
- *  rcc_peripheral_clear_reset(&RCC_APB2RSTR, ADC1RST);
- *
- *  rcc_set_adc_clk(ADC_PRE_PLCK2_DIV2);
- *  adc_set_dual_mode(ADC1, TODO);
- *  reg16 = adc_read(ADC1, ADC_CH_0);
  */
 
 /**@{*/
@@ -200,13 +181,11 @@ void adc_set_dual_mode(uint32_t mode)
 This enables both the sensor and the reference voltage measurements on channels
 16 and 17.
 
-@param[in] adc Unsigned int32. ADC block register address base @ref
-adc_reg_base.
 */
 
-void adc_enable_temperature_sensor(uint32_t adc)
+void adc_enable_temperature_sensor()
 {
-	ADC_CR2(adc) |= ADC_CR2_TSVREFE;
+	ADC_CR2(ADC1) |= ADC_CR2_TSVREFE;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -214,14 +193,11 @@ void adc_enable_temperature_sensor(uint32_t adc)
 
 Disabling this will reduce power consumption from the sensor and the reference
 voltage measurements.
-
-@param[in] adc Unsigned int32. ADC block register address base @ref
-adc_reg_base.
 */
 
-void adc_disable_temperature_sensor(uint32_t adc)
+void adc_disable_temperature_sensor()
 {
-	ADC_CR2(adc) &= ~ADC_CR2_TSVREFE;
+	ADC_CR2(ADC1) &= ~ADC_CR2_TSVREFE;
 }
 
 
@@ -350,7 +326,7 @@ void adc_reset_calibration(uint32_t adc)
 
 /*---------------------------------------------------------------------------*/
 /** @brief ADC Calibration
-
+@deprecated replaced by adc_calibrate/_async/_is_calibrating
 The calibration data for the ADC is recomputed. The hardware clears the
 calibration status flag when calibration is complete. This function does not
 return until this happens and the ADC is ready for use.
@@ -368,22 +344,37 @@ void adc_calibration(uint32_t adc)
 	while (ADC_CR2(adc) & ADC_CR2_CAL);
 }
 
-/*---------------------------------------------------------------------------*/
-/** @brief ADC Power On
-
-If the ADC is in power-down mode then it is powered up. The application needs
-to wait a time of about 3 microseconds for stabilization before using the ADC.
-If the ADC is already on this function call will initiate a conversion.
-
-@deprecated to be removed in a later release
-
-@param[in] adc Unsigned int32. ADC block register address base @ref
-adc_reg_base.
-*/
-
-void adc_on(uint32_t adc)
+/**
+ * Start the ADC calibration and immediately return.
+ * @sa adc_calibrate
+ * @sa adc_is_calibrate
+ * @param adc ADC Block register address base @ref adc_reg_base
+ */
+void adc_calibrate_async(uint32_t adc)
 {
-	ADC_CR2(adc) |= ADC_CR2_ADON;
+	ADC_CR2(adc) |= ADC_CR2_CAL;
+}
+
+/**
+ * Is the ADC Calibrating?
+ * @param adc ADC Block register address base @ref adc_reg_base
+ * @return true if the adc is currently calibrating
+ */
+bool adc_is_calibrating(uint32_t adc)
+{
+	return (ADC_CR2(adc) & ADC_CR2_CAL);
+}
+
+/**
+ * Start ADC calibration and wait for it to finish.
+ * The ADC must have been powered down for at least 2 ADC clock cycles, then
+ * powered on before calibration starts
+ * @param adc ADC Block register address base @ref adc_reg_base
+ */
+void adc_calibrate(uint32_t adc)
+{
+	adc_calibrate_async(adc);
+	while (adc_is_calibrating(adc));
 }
 
 

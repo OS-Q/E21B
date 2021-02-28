@@ -42,108 +42,6 @@ static inline void flash_set_program_size(uint32_t psize)
 }
 
 /*---------------------------------------------------------------------------*/
-/** @brief Enable the Data Cache
-
-*/
-
-void flash_dcache_enable(void)
-{
-	FLASH_ACR |= FLASH_ACR_DCE;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Disable the Data Cache
-
-*/
-
-void flash_dcache_disable(void)
-{
-	FLASH_ACR &= ~FLASH_ACR_DCE;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Enable the Instruction Cache
-
-*/
-
-void flash_icache_enable(void)
-{
-	FLASH_ACR |= FLASH_ACR_ICE;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Disable the Instruction Cache
-
-*/
-
-void flash_icache_disable(void)
-{
-	FLASH_ACR &= ~FLASH_ACR_ICE;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Enable the FLASH Prefetch Buffer
-
-This buffer is used for instruction fetches and is enabled by default after
-reset.
-
-Note carefully the clock restrictions under which the prefetch buffer may be
-enabled or disabled. Changes are normally made while the clock is running in
-the power-on low frequency mode before being set to a higher speed mode.
-See the reference manual for details.
-*/
-
-void flash_prefetch_enable(void)
-{
-	FLASH_ACR |= FLASH_ACR_PRFTEN;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Disable the FLASH Prefetch Buffer
-
-Note carefully the clock restrictions under which the prefetch buffer may be
-set to disabled. See the reference manual for details.
-*/
-
-void flash_prefetch_disable(void)
-{
-	FLASH_ACR &= ~FLASH_ACR_PRFTEN;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Reset the Data Cache
-
-The data cache must be disabled for this to have effect.
-*/
-
-void flash_dcache_reset(void)
-{
-	FLASH_ACR |= FLASH_ACR_DCRST;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Reset the Instruction Cache
-
-The instruction cache must be disabled for this to have effect.
-*/
-
-void flash_icache_reset(void)
-{
-	FLASH_ACR |= FLASH_ACR_ICRST;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Clear the Programming Sequence Error Flag
-
-This flag is set when incorrect programming configuration has been made.
-*/
-
-void flash_clear_pgserr_flag(void)
-{
-	FLASH_SR |= FLASH_SR_PGSERR;
-}
-
-/*---------------------------------------------------------------------------*/
 /** @brief Clear the Programming Alignment Error Flag
 
 */
@@ -151,6 +49,13 @@ void flash_clear_pgserr_flag(void)
 void flash_clear_pgaerr_flag(void)
 {
 	FLASH_SR |= FLASH_SR_PGAERR;
+}
+
+/** Clear programming parallelism error flag
+ */
+void flash_clear_pgperr_flag(void)
+{
+	FLASH_SR |= FLASH_SR_PGPERR;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -161,39 +66,6 @@ void flash_clear_pgaerr_flag(void)
 void flash_clear_wrperr_flag(void)
 {
 	FLASH_SR |= FLASH_SR_WRPERR;
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Clear All Status Flags
-
-Program error, end of operation, write protect error, busy.
-*/
-
-void flash_clear_status_flags(void)
-{
-	flash_clear_pgserr_flag();
-	flash_clear_pgaerr_flag();
-	flash_clear_wrperr_flag();
-	flash_clear_pgperr_flag();
-	flash_clear_eop_flag();
-	flash_clear_bsy_flag();
-}
-
-/*---------------------------------------------------------------------------*/
-/** @brief Unlock the Option Byte Access
-
-This enables write access to the option bytes. It is locked by default on
-reset.
-*/
-
-void flash_unlock_option_bytes(void)
-{
-	/* Clear the unlock state. */
-	FLASH_OPTCR |= FLASH_OPTCR_OPTLOCK;
-
-	/* Unlock option bytes. */
-	FLASH_OPTKEYR = FLASH_OPTKEYR_KEY1;
-	FLASH_OPTKEYR = FLASH_OPTKEYR_KEY2;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -215,8 +87,8 @@ This performs all operations necessary to program a 64 bit word to FLASH memory.
 The program error flag should be checked separately for the event that memory
 was not properly erased.
 
-@param[in] uint32_t address
-@param[in] uint64_t data.
+@param[in] address Starting address in Flash.
+@param[in] data Double word to write
 */
 
 void flash_program_double_word(uint32_t address, uint64_t data)
@@ -245,8 +117,8 @@ This performs all operations necessary to program a 32 bit word to FLASH memory.
 The program error flag should be checked separately for the event that memory
 was not properly erased.
 
-@param[in] uint32_t address
-@param[in] uint32_t data.
+@param[in] address Starting address in Flash.
+@param[in] data word to write
 */
 
 void flash_program_word(uint32_t address, uint32_t data)
@@ -275,8 +147,8 @@ This performs all operations necessary to program a 16 bit word to FLASH memory.
 The program error flag should be checked separately for the event that memory
 was not properly erased.
 
-@param[in] uint32_t address
-@param[in] uint16_t data.
+@param[in] address Starting address in Flash.
+@param[in] data half word to write
 */
 
 void flash_program_half_word(uint32_t address, uint16_t data)
@@ -300,8 +172,8 @@ This performs all operations necessary to program an 8 bit byte to FLASH memory.
 The program error flag should be checked separately for the event that memory
 was not properly erased.
 
-@param[in] uint32_t address
-@param[in] uint8_t data.
+@param[in] address Starting address in Flash.
+@param[in] data byte to write
 */
 
 void flash_program_byte(uint32_t address, uint8_t data)
@@ -325,12 +197,12 @@ This programs an arbitrary length data block to FLASH memory.
 The program error flag should be checked separately for the event that memory
 was not properly erased.
 
-@param[in] uint32_t address. Starting address in Flash.
-@param[in] uint8_t *data. Pointer to start of data block.
-@param[in] uint32_t len. Length of data block.
+@param[in] address Starting address in Flash.
+@param[in] data Pointer to start of data block.
+@param[in] len Length of data block.
 */
 
-void flash_program(uint32_t address, uint8_t *data, uint32_t len)
+void flash_program(uint32_t address, const uint8_t *data, uint32_t len)
 {
 	/* TODO: Use dword and word size program operations where possible for
 	 * turbo speed.
@@ -350,7 +222,7 @@ first be fully erased before attempting to program it.
 
 See the reference manual or the FLASH programming manual for details.
 
-@param[in] uint32_t sector (0 - 11 for some parts, 0-23 on others)
+@param[in] sector (0 - 11 for some parts, 0-23 on others)
 @param program_size: 0 (8-bit), 1 (16-bit), 2 (32-bit), 3 (64-bit)
 */
 
@@ -358,6 +230,11 @@ void flash_erase_sector(uint8_t sector, uint32_t program_size)
 {
 	flash_wait_for_last_operation();
 	flash_set_program_size(program_size);
+
+	/* Sector numbering is not contiguous internally! */
+	if (sector >= 12) {
+		sector += 4;
+	}
 
 	FLASH_CR &= ~(FLASH_CR_SNB_MASK << FLASH_CR_SNB_SHIFT);
 	FLASH_CR |= (sector & FLASH_CR_SNB_MASK) << FLASH_CR_SNB_SHIFT;
@@ -396,7 +273,7 @@ void flash_erase_all_sectors(uint32_t program_size)
 This performs all operations necessary to program the option bytes.
 The option bytes do not need to be erased first.
 
-@param[in] uint32_t data to be programmed.
+@param[in] data value to be programmed.
 */
 
 void flash_program_option_bytes(uint32_t data)
@@ -412,4 +289,3 @@ void flash_program_option_bytes(uint32_t data)
 	flash_wait_for_last_operation();
 }
 /**@}*/
-

@@ -50,6 +50,25 @@ static void stall_transaction(usbd_device *usbd_dev)
 	usbd_dev->control_state.state = IDLE;
 }
 
+/**
+ * If we're replying with _some_ data, but less than the host is expecting,
+ * then we normally just do a short transfer.  But if it's short, but a
+ * multiple of the endpoint max packet size, we need an explicit ZLP.
+ * @param len how much data we want to transfer
+ * @param wLength how much the host asked for
+ * @param ep_size
+ * @return
+ */
+static bool needs_zlp(uint16_t len, uint16_t wLength, uint8_t ep_size)
+{
+	if (len < wLength) {
+		if (len && (len % ep_size == 0)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /* Register application callback function for handling USB control requests. */
 int usbd_register_control_callback(usbd_device *usbd_dev, uint8_t type,
 				   uint8_t type_mask,
@@ -89,7 +108,11 @@ static void usb_control_send_chunk(usbd_device *usbd_dev)
 		usbd_ep_write_packet(usbd_dev, 0,
 				     usbd_dev->control_state.ctrl_buf,
 				     usbd_dev->control_state.ctrl_len);
-		usbd_dev->control_state.state = LAST_DATA_IN;
+
+		usbd_dev->control_state.state =
+			usbd_dev->control_state.needs_zlp ?
+			DATA_IN : LAST_DATA_IN;
+		usbd_dev->control_state.needs_zlp = false;
 		usbd_dev->control_state.ctrl_len = 0;
 		usbd_dev->control_state.ctrl_buf = NULL;
 	}
@@ -115,8 +138,9 @@ static int usb_control_recv_chunk(usbd_device *usbd_dev)
 	return packetsize;
 }
 
-static int usb_control_request_dispatch(usbd_device *usbd_dev,
-					struct usb_setup_data *req)
+static enum usbd_request_return_codes
+usb_control_request_dispatch(usbd_device *usbd_dev,
+			     struct usb_setup_data *req)
 {
 	int i, result = 0;
 	struct user_control_callback *cb = usbd_dev->user_control_callback;
@@ -153,7 +177,11 @@ static void usb_control_setup_read(usbd_device *usbd_dev,
 	usbd_dev->control_state.ctrl_len = req->wLength;
 
 	if (usb_control_request_dispatch(usbd_dev, req)) {
-		if (usbd_dev->control_state.ctrl_len) {
+		if (req->wLength) {
+			usbd_dev->control_state.needs_zlp =
+				needs_zlp(usbd_dev->control_state.ctrl_len,
+					req->wLength,
+					usbd_dev->desc->bMaxPacketSize0);
 			/* Go to data out stage if handled. */
 			usb_control_send_chunk(usbd_dev);
 		} else {
@@ -184,6 +212,8 @@ static void usb_control_setup_write(usbd_device *usbd_dev,
 	} else {
 		usbd_dev->control_state.state = LAST_DATA_OUT;
 	}
+
+	usbd_ep_nak_set(usbd_dev, 0, 0);
 }
 
 /* Do not appear to belong to the API, so are omitted from docs */
@@ -196,10 +226,7 @@ void _usbd_control_setup(usbd_device *usbd_dev, uint8_t ea)
 
 	usbd_dev->control_state.complete = NULL;
 
-	if (usbd_ep_read_packet(usbd_dev, 0, req, 8) != 8) {
-		stall_transaction(usbd_dev);
-		return;
-	}
+	usbd_ep_nak_set(usbd_dev, 0, 1);
 
 	if (req->wLength == 0) {
 		usb_control_setup_read(usbd_dev, req);
@@ -235,7 +262,7 @@ void _usbd_control_out(usbd_device *usbd_dev, uint8_t ea)
 		 */
 		if (usb_control_request_dispatch(usbd_dev,
 					&(usbd_dev->control_state.req))) {
-			/* Got to status stage on success. */
+			/* Go to status stage on success. */
 			usbd_ep_write_packet(usbd_dev, 0, NULL, 0);
 			usbd_dev->control_state.state = STATUS_IN;
 		} else {
@@ -267,6 +294,7 @@ void _usbd_control_in(usbd_device *usbd_dev, uint8_t ea)
 		break;
 	case LAST_DATA_IN:
 		usbd_dev->control_state.state = STATUS_OUT;
+		usbd_ep_nak_set(usbd_dev, 0, 0);
 		break;
 	case STATUS_IN:
 		if (usbd_dev->control_state.complete) {
