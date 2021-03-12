@@ -1,4 +1,4 @@
-name: ubuntu
+name: make
 
 on:
   push:
@@ -31,9 +31,11 @@ jobs:
 
       - name: Install
         run: |
-          pip install --upgrade pip wheel setuptools
+          sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
+          sudo apt-get update
+          sudo apt-get install gcc-arm-embedded
 
-      - name: Build
+      - name: make
         run: |
           make
           make -C tests/gadget-zero
