@@ -2,9 +2,7 @@ build: off
 environment:
 
 install:
-  - cmd: sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
-  - cmd: sudo apt-get update
-  - cmd: sudo apt-get install gcc-arm-embedded
+  - cmd: sudo apt install gcc-arm-embedded
 
 script:
   - cmd: make
