@@ -31,7 +31,7 @@ jobs:
 
       - name: Install
         run: |
-          sudo apt install gcc-arm-embedded
+          sudo apt install gcc-arm-none-eabi
 
       - name: make
         run: |
