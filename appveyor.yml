@@ -1,5 +1,4 @@
 build: off
-environment:
 
 install:
   - cmd: sudo apt install gcc-arm-none-eabi
