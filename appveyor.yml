@@ -1,8 +1,11 @@
 build: off
+environment:
+  matrix:
+    - PLATFORMIO_PROJECT_DIR: "tests/gadget-zero"
 
 install:
-  - cmd: sudo apt install gcc-arm-none-eabi
+  - cmd: apt install -y gcc-arm-none-eabi
 
-script:
+test_script:
   - cmd: make
-  - cmd: make -C tests/gadget-zero
+  - cmd: make -C %PLATFORMIO_PROJECT_DIR%
