@@ -1,3 +1,22 @@
+##
+## This file is part of the libopencm3 project.
+##
+## Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
+##
+## This library is free software: you can redistribute it and/or modify
+## it under the terms of the GNU Lesser General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This library is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU Lesser General Public License
+## along with this library.  If not, see <http://www.gnu.org/licenses/>.
+##
+
 PREFIX		?= arm-none-eabi-
 
 STYLECHECK      := scripts/checkpatch.pl
@@ -6,7 +25,17 @@ STYLECHECKFLAGS := --no-tree -f --terse --mailback
 TARGETS ?=	stm32/f0 stm32/f1 stm32/f2 stm32/f3 stm32/f4 stm32/f7 \
 		stm32/l0 stm32/l1 stm32/l4 \
 		stm32/g0 stm32/g4 \
-		stm32/h7
+		stm32/h7 \
+		gd32/f1x0 \
+		lpc13xx lpc17xx lpc43xx/m4 lpc43xx/m0 \
+		lm3s lm4f msp432/e4 \
+		efm32/tg efm32/g efm32/lg efm32/gg efm32/hg efm32/wg \
+		efm32/ezr32wg \
+		sam/3a sam/3n sam/3s sam/3u sam/3x sam/4l \
+		sam/d \
+		vf6xx \
+		swm050 \
+		pac55xx
 
 # Be silent per default, but 'make V=1' will show all compiler calls.
 ifneq ($(V),1)
@@ -46,6 +75,9 @@ lib: $(LIB_DIRS)
 		[ -f $$failure ] && cat $$failure >> .stamp_failure_tld || true; \
 	done;
 	$(Q)[ -f .stamp_failure_tld ] && cat .stamp_failure_tld && exit 1 || true;
+
+html doc:
+	$(Q)$(MAKE) -C doc html TARGETS="$(TARGETS)"
 
 clean: $(IRQ_DEFN_FILES:=.cleanhdr) $(LIB_DIRS:=.clean) $(EXAMPLE_DIRS:=.clean) doc.clean styleclean genlinktests.clean
 
@@ -89,4 +121,4 @@ genlinktests.clean:
 	fi;
 
 
-.PHONY: build lib $(LIB_DIRS) clean generatedheaders cleanheaders stylecheck genlinktests genlinktests.clean
+.PHONY: build lib $(LIB_DIRS) doc clean generatedheaders cleanheaders stylecheck genlinktests genlinktests.clean
